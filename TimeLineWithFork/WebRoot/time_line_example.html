@@ -3,14 +3,17 @@
   <head>
     <style type="text/css">
       .time_line{
+       font-size: 14px;
       }
       .time_line .row{
         height: 20px;
       }
       .time_line .row>.col{
         height: 100%;
-        width: 20px;
+        min-width: 20px;
         text-align: center;
+        display:inline-block;
+        vertical-align: middle;
       }
       .time_line .v-line{
         border: 0;
@@ -20,13 +23,27 @@
         display:inline-block;
         margin: 0 auto;
       }
+      .time_line .dot{
+        border-radius: 50%;
+		width: 4px;
+		height: 4px; 
+		background-color: #999;
+		position: relative;
+		top: 8px;
+		left: -2.5px;
+      }
     </style>
   </head>
   <body>
     <div class="time_line">
       <div class="row">
         <div class="col">
-          <div class="v-line"></div>
+          <div class="v-line">
+            <div class="dot"></div>
+          </div>
+        </div>
+        <div class="col">
+                 °æ±¾1
         </div>
       </div>
     </div>
