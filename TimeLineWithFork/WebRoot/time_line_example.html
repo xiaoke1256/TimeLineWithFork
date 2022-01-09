@@ -44,14 +44,15 @@
         display: inline-block;
         vertical-align: baseline;
       }
-      .time_line .oblique_line{
+      
+      .time_line .oblique_to_right{
         width: 9.5px;
         height: 10px;
         display: inline-block;
         vertical-align: baseline;
       }
       
-      .time_line .oblique_line::after{
+      .time_line .oblique_to_right::after{
         content: "";
         border-top: 0.5px solid #999;
         width:100%;
@@ -60,6 +61,24 @@
         -webkit-transform: scale(1.5) translateY(3.0px) rotateZ(45deg) ;
   		transform: scale(1.5) translateY(3.0px) rotateZ(45deg) ;
       }
+      
+      .time_line .oblique_from_left{
+        width: 9.5px;
+        height: 10px;
+        display: inline-block;
+        vertical-align: top;
+      }
+      
+      .time_line .oblique_from_left::after{
+        content: "";
+        border-top: 0.5px solid #999;
+        width:100%;
+        margin: auto 0;
+        display: block;
+        -webkit-transform: scale(1.5) translateY(3.0px) rotateZ(45deg) ;
+  		transform: scale(1.5) translateY(3.0px) rotateZ(45deg) ;
+      }
+      
       /*只有下半部的竖线*/
       .time_line .v-line-half-down{
         border: 0;
@@ -90,7 +109,7 @@
           <div class="v-line">
             <div class="dot"></div>
           </div>
-          <div class="oblique_line">
+          <div class="oblique_to_right">
           </div>
         </div>
         <div class="col">
@@ -106,7 +125,7 @@
           </div>
         </div>
         <div class="col">
-          <div class="oblique_line" style="vertical-align: top">
+          <div class="oblique_from_left" >
           </div>
           <div class="v-line-half-down">
             <div class="dot"></div>
@@ -116,6 +135,36 @@
         </div>
         <div class="col text">
                  版本2
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col">
+          <div class="v-line">
+            <div class="dot"></div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="v-line">
+          </div>
+        </div>
+        <div class="col text">
+                 版本3
+        </div>
+      </div>
+      
+       <div class="row">
+        <div class="col">
+          <div class="v-line">
+            <div class="dot"></div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="v-line">
+          </div>
+        </div>
+        <div class="col text">
+                 版本4
         </div>
       </div>
     </div>
