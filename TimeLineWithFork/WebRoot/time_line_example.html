@@ -79,6 +79,41 @@
   		transform: scale(1.5) translateY(3.0px) rotateZ(45deg) ;
       }
       
+      .time_line .oblique_from_right{
+        width: 9.5px;
+        height: 10px;
+        display: inline-block;
+        vertical-align: top;
+      }
+      
+      .time_line .oblique_from_right::after{
+        content: "";
+        border-top: 0.5px solid #999;
+        width:100%;
+        margin: auto 0;
+        display: block;
+        -webkit-transform: scale(1.5) translateY(3.0px) rotateZ(-45deg) ;
+  		transform: scale(1.5) translateY(3.0px) rotateZ(-45deg) ;
+      }
+      
+      .time_line .oblique_to_left{
+        width: 9.5px;
+        height: 10px;
+        display: inline-block;
+        vertical-align: baseline;
+        margin-top: 10px;
+      }
+      
+      .time_line .oblique_to_left::after{
+        content: "";
+        border-top: 0.5px solid #999;
+        width:100%;
+        margin: auto 0;
+        display: block;
+        -webkit-transform: scale(1.5) translateY(3.0px) rotateZ(-45deg) ;
+  		transform: scale(1.5) translateY(3.0px) rotateZ(-45deg) ;
+      }
+      
       /*只有下半部的竖线*/
       .time_line .v-line-half-down{
         border: 0;
@@ -88,6 +123,16 @@
         margin-top: 50%;
         display: inline-block;
         vertical-align: baseline;
+      }
+      /*只有上半部的竖线*/
+      .time_line .v-line-half-top{
+        border: 0;
+        border-left: 1px solid #999;
+        width: 0;
+        height: 50%;
+        margin-bottom: 50%;
+        display: inline-block;
+        vertical-align: top;
       }
       .time_line .v-line-half-down .dot{
         border-radius: 50%;
@@ -145,7 +190,11 @@
           </div>
         </div>
         <div class="col">
-          <div class="v-line">
+          <div class="oblique_to_left" >
+          </div>
+          <div class="v-line-half-top">
+          </div>
+          <div class="empty">
           </div>
         </div>
         <div class="col text">
@@ -155,13 +204,15 @@
       
        <div class="row">
         <div class="col">
+          <div class="empty">
+          </div>
           <div class="v-line">
             <div class="dot"></div>
           </div>
+          <div class="oblique_from_right" >
+          </div>
         </div>
         <div class="col">
-          <div class="v-line">
-          </div>
         </div>
         <div class="col text">
                  版本4
