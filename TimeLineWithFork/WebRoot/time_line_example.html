@@ -38,6 +38,21 @@
 		top: 8px;
 		left: -2.5px;
       }
+      .time_line .oblique_line{
+        width: 10px;
+        height: 10px;
+        display: inline-block;
+        vertical-align: bottom;
+      }
+      
+      .time_line .oblique_line::after{
+        content: "";
+        border-top: 1px solid #999;
+        width:100%;
+        display: block;
+        -webkit-transform: rotate(45deg);
+  		transform: rotate(45deg);
+      }
     </style>
   </head>
   <body>
@@ -46,6 +61,8 @@
         <div class="col">
           <div class="v-line">
             <div class="dot"></div>
+          </div>
+          <div class="oblique_line">
           </div>
         </div>
         <div class="col">
