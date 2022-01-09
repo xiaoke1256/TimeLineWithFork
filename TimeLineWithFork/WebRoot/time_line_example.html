@@ -3,7 +3,7 @@
   <head>
     <style type="text/css">
       .time_line{
-       font-size: 14px;
+       font-size: 0;
        color: #999;
       }
       .time_line .row{
@@ -19,6 +19,7 @@
       
       .time_line .row>.text{
         padding-left:6px;
+        font-size: 14px;
       }
       
       .time_line .v-line{
@@ -27,7 +28,6 @@
         width:0;
         height:100%;
         display:inline-block;
-        margin: 0 auto;
       }
       .time_line .dot{
         border-radius: 50%;
@@ -38,20 +38,46 @@
 		top: 8px;
 		left: -2.5px;
       }
-      .time_line .oblique_line{
-        width: 10px;
+      .time_line .empty{
+        width: 9.5px;
         height: 10px;
         display: inline-block;
-        vertical-align: bottom;
+        vertical-align: baseline;
+      }
+      .time_line .oblique_line{
+        width: 9.5px;
+        height: 10px;
+        display: inline-block;
+        vertical-align: baseline;
       }
       
       .time_line .oblique_line::after{
         content: "";
-        border-top: 1px solid #999;
+        border-top: 0.5px solid #999;
         width:100%;
+        margin: auto 0;
         display: block;
-        -webkit-transform: rotate(45deg);
-  		transform: rotate(45deg);
+        -webkit-transform: scale(1.5) translateY(3.0px) rotateZ(45deg) ;
+  		transform: scale(1.5) translateY(3.0px) rotateZ(45deg) ;
+      }
+      /*只有下半部的竖线*/
+      .time_line .v-line-half-down{
+        border: 0;
+        border-left: 1px solid #999;
+        width: 0;
+        height: 50%;
+        margin-top: 50%;
+        display: inline-block;
+        vertical-align: baseline;
+      }
+      .time_line .v-line-half-down .dot{
+        border-radius: 50%;
+		width: 4px;
+		height: 4px; 
+		background-color: #999;
+		position: relative;
+		top: -2px;
+		left: -2.5px;
       }
     </style>
   </head>
@@ -59,6 +85,8 @@
     <div class="time_line">
       <div class="row">
         <div class="col">
+          <div class="empty">
+          </div>
           <div class="v-line">
             <div class="dot"></div>
           </div>
@@ -71,14 +99,19 @@
                  版本1
         </div>
       </div>
+
       <div class="row">
         <div class="col">
           <div class="v-line">
           </div>
         </div>
         <div class="col">
-          <div class="v-line">
+          <div class="oblique_line" style="vertical-align: top">
+          </div>
+          <div class="v-line-half-down">
             <div class="dot"></div>
+          </div>
+          <div class="empty">
           </div>
         </div>
         <div class="col text">
