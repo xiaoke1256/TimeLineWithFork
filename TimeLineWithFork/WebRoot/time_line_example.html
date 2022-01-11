@@ -22,6 +22,15 @@
         font-size: 14px;
       }
       
+      .time_line .center_point{
+        border: 0;
+        border-left: 1px solid #999;
+        width:0;
+        height:1px;
+        display:inline-block;
+        margin-top:9.5px
+      }
+      
       .time_line .v-line{
         border: 0;
         border-left: 1px solid #999;
@@ -366,11 +375,17 @@
           <div class="v-line">  
             <div class="dot"></div>
           </div>
-          <div class="oblique_from_right" >
+          <div style="display: inline-block;vertical-align: top;">
+            <div class="oblique_from_right" style="display: block;" >
+            </div>
+            <div class="h-line-half" style="display: block;margin-top:-0.5px;">
+            </div>
           </div>
         </div>
         <div class="col">
           <div class="h-line-half">
+          </div>
+          <div class="center_point">
           </div>
           <div class="oblique_from_right" >
           </div>
