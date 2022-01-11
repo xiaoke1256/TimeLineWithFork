@@ -1,167 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <style type="text/css">
-      .time_line{
-       font-size: 0;
-       color: #999;
-      }
-      .time_line .row{
-        height: 20px;
-      }
-      .time_line .row>.col{
-        height: 100%;
-        min-width: 20px;
-        text-align: center;
-        display:inline-block;
-        vertical-align: middle;
-      }
-      
-      .time_line .row>.text{
-        padding-left:6px;
-        font-size: 14px;
-      }
-      
-      .time_line .center_point{
-        border: 0;
-        border-left: 1px solid #999;
-        width:0;
-        height:1px;
-        display:inline-block;
-        margin-top:9.5px
-      }
-      
-      .time_line .v-line{
-        border: 0;
-        border-left: 1px solid #999;
-        width:0;
-        height:100%;
-        display:inline-block;
-      }
-      .time_line .dot{
-        border-radius: 50%;
-		width: 4px;
-		height: 4px; 
-		background-color: #999;
-		position: relative;
-		top: 8px;
-		left: -2.5px;
-      }
-      .time_line .empty{
-        width: 9.5px;
-        height: 10px;
-        display: inline-block;
-        vertical-align: baseline;
-      }
-      
-      .time_line .oblique_to_right{
-        width: 9.5px;
-        height: 10px;
-        display: inline-block;
-        vertical-align: baseline;
-      }
-      
-      .time_line .oblique_to_right::after{
-        content: "";
-        border-top: 0.5px solid #999;
-        width:100%;
-        margin: auto 0;
-        display: block;
-        -webkit-transform: scale(1.5) translateY(3.0px) rotateZ(45deg) ;
-  		transform: scale(1.5) translateY(3.0px) rotateZ(45deg) ;
-      }
-      
-      .time_line .oblique_from_left{
-        width: 9.5px;
-        height: 10px;
-        display: inline-block;
-        vertical-align: top;
-      }
-      
-      .time_line .oblique_from_left::after{
-        content: "";
-        border-top: 0.5px solid #999;
-        width:100%;
-        margin: auto 0;
-        display: block;
-        -webkit-transform: scale(1.5) translateY(3.0px) rotateZ(45deg) ;
-  		transform: scale(1.5) translateY(3.0px) rotateZ(45deg) ;
-      }
-      
-      .time_line .oblique_from_right{
-        width: 9.5px;
-        height: 10px;
-        display: inline-block;
-        vertical-align: top;
-      }
-      
-      .time_line .oblique_from_right::after{
-        content: "";
-        border-top: 0.5px solid #999;
-        width:100%;
-        margin: auto 0;
-        display: block;
-        -webkit-transform: scale(1.5) translateY(3.0px) rotateZ(-45deg) ;
-  		transform: scale(1.5) translateY(3.0px) rotateZ(-45deg) ;
-      }
-      
-      .time_line .oblique_to_left{
-        width: 9.5px;
-        height: 10px;
-        display: inline-block;
-        vertical-align: baseline;
-        margin-top: 10px;
-      }
-      
-      .time_line .oblique_to_left::after{
-        content: "";
-        border-top: 0.5px solid #999;
-        width:100%;
-        margin: auto 0;
-        display: block;
-        -webkit-transform: scale(1.5) translateY(3.0px) rotateZ(-45deg) ;
-  		transform: scale(1.5) translateY(3.0px) rotateZ(-45deg) ;
-      }
-      
-      /*只有下半部的竖线*/
-      .time_line .v-line-half-down{
-        border: 0;
-        border-left: 1px solid #999;
-        width: 0;
-        height: 50%;
-        margin-top: 50%;
-        display: inline-block;
-        vertical-align: baseline;
-      }
-      /*只有上半部的竖线*/
-      .time_line .v-line-half-top{
-        border: 0;
-        border-left: 1px solid #999;
-        width: 0;
-        height: 50%;
-        margin-bottom: 50%;
-        display: inline-block;
-        vertical-align: top;
-      }
-      .time_line .v-line-half-down .dot{
-        border-radius: 50%;
-		width: 4px;
-		height: 4px; 
-		background-color: #999;
-		position: relative;
-		top: -2px;
-		left: -2.5px;
-      }
-      /*半边横线*/
-      .time_line .h-line-half{
-        width: 9.5px;
-        height: 0;
-        border-bottom: 1px solid #999;
-        display: inline-block;
-        vertical-align: top;
-        margin-top: 9.5px;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="css/time_line.css">
   </head>
   <body>
     <div class="time_line">
@@ -375,10 +215,10 @@
           <div class="v-line">  
             <div class="dot"></div>
           </div>
-          <div style="display: inline-block;vertical-align: top;">
-            <div class="oblique_from_right" style="display: block;" >
+          <div class="v_wrap">
+            <div class="oblique_from_right" >
             </div>
-            <div class="h-line-half" style="display: block;margin-top:-0.5px;">
+            <div class="h-line-half" >
             </div>
           </div>
         </div>
