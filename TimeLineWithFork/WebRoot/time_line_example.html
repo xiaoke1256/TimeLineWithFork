@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/time_line.css">
+    <script src="js/jquery-3.6.0.js" type="text/javascript"></script>
+    <script src="js/forked_time_line.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    $(function(){
+    	var datas = [{id:'1',timestamp:'1',text:'版本1',parent:null},
+    		{id:'2',timestamp:'2',text:'版本2',parent:'1'},
+    		{id:'3',timestamp:'3',text:'版本3',parent:'1'},
+    		{id:'4',timestamp:'4',text:'版本4',parent:'3'},
+    		{id:'5',timestamp:'5',text:'版本5',parent:['4','2']},
+    		{id:'6',timestamp:'6',text:'版本6',parent:'5'}];
+    	$('#time_line').forkedTimeLine(datas);
+    });
+    </script>
+  </head>
+  <body>
+    <div id="time_line">
+    </div>
+  </body>
+</html>
