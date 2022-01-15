@@ -15,6 +15,11 @@
       	  throw new Error('The collumn id can not be null.');
       	}
       }
+      //检查重复
+      if(isIdRepeat(datas)){
+    	throw new Error('The collumn id can not be repeated.');
+      }
+      
       //按timestamp 排序
       datas.sort(function(a,b){return a.timestamp.localeCompare(b.timestamp)});
       
@@ -53,9 +58,32 @@
       }
       
       //再给分支分配列
+      var cols = [];
       
       //然后绘制出这些列
 	  $(this).addClass('time_line');
     }
   });
+  
+  /**
+   * 判断主键是否重复
+   */
+  var isIdRepeat = function(datas){
+	if(!datas){
+	  return false;
+	}
+	if(datas.length<=1){
+	  return false;
+	}
+	for(var i=1;i<datas.length;i++){
+	  var data = datas[i];
+	  for(var j=0;j<i;j++){
+		var other = datas[j];
+		if(data.id == other.id){
+		  return true;
+		}
+	  }
+	}
+	return false;
+  } 
 })(jQuery);
