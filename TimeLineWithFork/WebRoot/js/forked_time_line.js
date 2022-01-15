@@ -60,8 +60,27 @@
       //再给分支分配列
       var cols = [];
       for(var i in branches){
+    	var currentBranch = branches[i];
     	//从cols里找不冲突的列
+    	var findCol = false;
+    	for(var j in cols){
+    	  var col = cols[j];
+    	  var isConflict = false;
+    	  for(var k in col){
+    		var branch = col[k];
+    		//判断是否与当前列冲突
+    	  }
+    	  if(!isConflict){
+    		col.push(currentBranch);
+    		findCol = true;
+    		break;
+    	  }
+    	}
     	//找不到不冲突的列则新建一个列
+    	if(!findCol){
+    	  var col=[currentBranch];
+    	  cols.push(col);
+    	}
       }
       
       //给每一条数据打上标记（哪个分支哪个列）。
