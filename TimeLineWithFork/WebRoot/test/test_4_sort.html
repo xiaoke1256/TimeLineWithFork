@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript">
+    var datas = [{id:'1',timestamp:'2022-01-15 13:24:21.333',text:'°æ±¾1',parent:null},
+		{id:'2',timestamp:'2022-01-15 13:24:00.333',text:'°æ±¾2',parent:'1'},
+		{id:'3',timestamp:'2022-01-16 13:24:00.333',text:'°æ±¾3',parent:'1'}];
+    datas = datas.sort(function(a,b){return a.timestamp.localeCompare(b.timestamp)});
+    console.log("datas:"+JSON.stringify(datas));
+    
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
