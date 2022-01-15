@@ -23,6 +23,7 @@
       var branches = [];
       //凡是两个结点指向同一个父节点就算新的分支
       for(var i in datas){
+    	  
     	var data = datas[i];
     	if(!data.parent){
     	  var branche = [];//新分支
@@ -30,13 +31,23 @@
     	  branches.push(branche);
     	  continue;
     	}
+    	
     	//找各个分支的最后一个节点
+    	var findBranch = false;
     	for(var i in branches){
     	  var branche = branches[i];
     	  var lastNode = branche[branche.length-1];
     	  if(lastNode.id === data.parent){
-    		  
+    		branche.push(data);
+    		findBranch = true;
+    		break;
     	  }
+    	}
+    	//找不到则创建一个新分支
+    	if(findBranch){
+    	  var branche = [];//新分支
+      	  branche.push(data);
+      	  branches.push(branche);
     	}
     	
       }
