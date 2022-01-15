@@ -7,13 +7,13 @@
       }
       //检查 timestamp 不能为空 , id 不能为空
       for(var i in datas){
-    	  var data = datas[i];
-    	  if(!data.timestamp){
-    		throw new Error('The collumn timestamp can not be null.');
-    	  }
-    	  if(!data.id){
-      		throw new Error('The collumn id can not be null.');
-      	  }
+    	var data = datas[i];
+    	if(!data.timestamp){
+    	  throw new Error('The collumn timestamp can not be null.');
+    	}
+    	if(!data.id){
+      	  throw new Error('The collumn id can not be null.');
+      	}
       }
       //按timestamp 排序
       datas.sort(function(a,b){return a.timestamp.localeCompare(b.timestamp)});
