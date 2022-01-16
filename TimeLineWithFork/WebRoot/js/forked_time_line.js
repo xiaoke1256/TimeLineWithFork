@@ -52,16 +52,24 @@
     		for(var j in data.parent){
     		  var parentId = data.parent[i];
     		  if(lastNode.id === parentId){
-    			branche.push(data);
-    			findBranch = true; 
-    			break
+    			if(!findBranch){
+    			  branche.push(data);
+    			  findBranch = true; 
+    			}else{
+    			  //汇聚来的分支
+    			  if(!data.colMeta){
+    				data.colMeta = {fromBranchs:[]};
+    			  }else if(!data.colMeta.fromBranchs){
+    				data.colMeta.fromBranchs = [];
+    			  }
+    			  data.colMeta.fromBranchs.push(i);
+    			}
     		  }
     		}
-    		if(findBranch){
-    		  break;
-    		}
+    		
     	  }
-    	}
+    	}//of branches
+    	
     	//找不到则创建一个新分支
     	if(findBranch){
     	  var branche = [];//新分支
@@ -107,7 +115,12 @@
     	var col = cols[colIndex];
     	for(var branchIndex in col){
     	  var branche = col[branchIndex];
-    	  branche.colMeta = {branchIndex:branchIndex,colIndex:colIndex};
+    	  if(!branche.colMeta){
+    		branche.colMeta = {branchIndex:branchIndex,colIndex:colIndex};
+    	  }else{
+    		branche.colMeta.branchIndex = branchIndex;
+    		branche.colMeta.colIndex = colIndex;
+    	  }
     	}
       }
       
