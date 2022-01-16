@@ -137,7 +137,7 @@
 		var $row = $('<div>').addClass('row');
 		for(var colIndex = 0;colIndex<cols.length;colIndex++){
 		  $col = $('<div>').addClass('col');
-		  if(data.colMeta && data.colMeta.colIndex == colIndex){
+		  if(data.colMeta.colIndex == colIndex){
 			$col.append('<div class="v-line">'+
 		            '<div class="dot"></div>'+
 		            '</div>');
