@@ -43,7 +43,8 @@
     	  var branche = branches[i];
     	  var lastNode = branche[branche.length-1];
     	  
-    	  if(!data.parent instanceof Array && lastNode.id === data.parent){
+    	  if(!(data.parent instanceof Array) && lastNode.id === data.parent){
+    		console.log('lastNode.id:',lastNode.id,'data.parent',data.parent, (lastNode.id === data.parent));
     		branche.push(data);
     		findBranch = true;
     		break;
@@ -52,18 +53,26 @@
     		for(var j in data.parent){
     		  var parentId = data.parent[i];
     		  if(lastNode.id === parentId){
-    			branche.push(data);
-    			findBranch = true; 
-    			break
+    			if(!findBranch){
+    			  branche.push(data);
+    			  findBranch = true; 
+    			}else{
+    			  //汇聚来的分支
+    			  if(!data.colMeta){
+    				data.colMeta = {fromBranchs:[]};
+    			  }else if(!data.colMeta.fromBranchs){
+    				data.colMeta.fromBranchs = [];
+    			  }
+    			  data.colMeta.fromBranchs.push(i);
+    			}
     		  }
     		}
-    		if(findBranch){
-    		  break;
-    		}
+    		
     	  }
-    	}
+    	}//of branches
+    	
     	//找不到则创建一个新分支
-    	if(findBranch){
+    	if(!findBranch){
     	  var branche = [];//新分支
       	  branche.push(data);
       	  branches.push(branche);
@@ -107,7 +116,16 @@
     	var col = cols[colIndex];
     	for(var branchIndex in col){
     	  var branche = col[branchIndex];
-    	  branche.colMeta = {branchIndex:branchIndex,colIndex:colIndex};
+    	  for(var dataIndex in branche){
+    		var data = branche[dataIndex];
+    		if(!data.colMeta){
+    		  data.colMeta = {branchIndex:branchIndex,colIndex:colIndex};
+        	}else{
+        	  data.colMeta.branchIndex = branchIndex;
+        	  data.colMeta.colIndex = colIndex;
+        	}
+    		console.log('in data:','dataId:' , data.id,'branchIndex:',data.colMeta.branchIndex,'colIndex:',data.colMeta.colIndex);
+    	  }
     	}
       }
       
@@ -115,11 +133,18 @@
 	  $(this).addClass('time_line');
 	  for(var i in datas){
 		var data = datas[i];
+		console.log('in draw:','dataId:' , data.id,'branchIndex:',data.colMeta.branchIndex,'colIndex:',data.colMeta.colIndex);
 		var $row = $('<div>').addClass('row');
 		for(var colIndex = 0;colIndex<cols.length;colIndex++){
 		  $col = $('<div>').addClass('col');
+		  if(data.colMeta && data.colMeta.colIndex == colIndex){
+			$col.append('<div class="v-line">'+
+		            '<div class="dot"></div>'+
+		            '</div>');
+		  }
 		  $row.append($col);
 		}
+		//$row.append('<div class="col">'+data.id+'</div>');
 		$(this).append($row);
 	  }
     }
