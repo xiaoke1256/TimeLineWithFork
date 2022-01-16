@@ -88,6 +88,13 @@
       }
       
       //给每一条数据打上标记（哪个分支哪个列）。
+      for(var colIndex in cols){
+    	var col = cols[colIndex];
+    	for(var branchIndex in col){
+    	  var branche = col[branchIndex];
+    	  branche.colMeta = {branchIndex:branchIndex,colIndex:colIndex};
+    	}
+      }
       
       //绘制
 	  $(this).addClass('time_line');
