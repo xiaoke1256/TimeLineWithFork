@@ -42,10 +42,24 @@
     	for(var i in branches){
     	  var branche = branches[i];
     	  var lastNode = branche[branche.length-1];
-    	  if(lastNode.id === data.parent){
+    	  
+    	  if(!data.parent instanceof Array && lastNode.id === data.parent){
     		branche.push(data);
     		findBranch = true;
     		break;
+    	  }else if(data.parent instanceof Array){
+    		//data.parent 有可能是个数组，如果是数组要标记好从哪几个分支汇聚过来的。
+    		for(var j in data.parent){
+    		  var parentId = data.parent[i];
+    		  if(lastNode.id === parentId){
+    			branche.push(data);
+    			findBranch = true; 
+    			break
+    		  }
+    		}
+    		if(findBranch){
+    		  break;
+    		}
     	  }
     	}
     	//找不到则创建一个新分支
@@ -53,6 +67,7 @@
     	  var branche = [];//新分支
       	  branche.push(data);
       	  branches.push(branche);
+      	  //标记好这个分支是从哪里来的
     	}
     	
       }
