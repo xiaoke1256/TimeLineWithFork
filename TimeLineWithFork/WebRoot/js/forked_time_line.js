@@ -42,6 +42,7 @@
     	for(var i in branches){
     	  var branche = branches[i];
     	  var lastNode = branche[branche.length-1];
+    	  //data.parent 有可能是个数组，如果是数组要标记好从哪几个分支汇聚过来的。
     	  if(lastNode.id === data.parent){
     		branche.push(data);
     		findBranch = true;
@@ -53,6 +54,7 @@
     	  var branche = [];//新分支
       	  branche.push(data);
       	  branches.push(branche);
+      	  //标记好这个分支是从哪里来的
     	}
     	
       }
