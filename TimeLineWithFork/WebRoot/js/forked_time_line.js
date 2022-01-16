@@ -98,6 +98,15 @@
       
       //绘制
 	  $(this).addClass('time_line');
+	  for(var i in datas){
+		var data = datas[i];
+		var $row = $('<div>').addClass('row');
+		for(var colIndex = 0;colIndex<cols.length;colIndex++){
+		  $col = $('<div>').addClass('col');
+		  $row.append($col);
+		}
+		$(this).append($row);
+	  }
     }
   });
   
