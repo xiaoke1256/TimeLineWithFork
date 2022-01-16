@@ -69,6 +69,10 @@
     	  for(var k in col){
     		var branch = col[k];
     		//判断是否与当前列冲突
+    		if(checkConflict(branch,currentBranch)){
+    		  isConflict = true;
+    		  break;
+    		}
     	  }
     	  if(!isConflict){
     		col.push(currentBranch);
@@ -111,4 +115,22 @@
 	}
 	return false;
   } 
+  
+  /**
+   * 检测冲突
+   */
+  var checkConflict = function(branche, another){
+	var oneStart = branche[0].timestamp;
+	var oneEnd = branche[branche.length-1].timestamp;
+	var anotherStart = another[0].timestamp;
+	var anotherEnd = another[another.length-1].timestamp;
+	if(anotherStart>=oneStart && anotherStart<=oneEnd ){
+	  return true;
+	}
+	if(anotherEnd>=oneStart && anotherEnd<=oneEnd ){
+	  return true;
+	}
+	return false;
+  }
+  
 })(jQuery);
