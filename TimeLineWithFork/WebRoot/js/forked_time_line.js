@@ -51,7 +51,7 @@
     	  }else if(data.parent instanceof Array){
     		//data.parent 有可能是个数组，如果是数组要标记好从哪几个分支汇聚过来的。
     		for(var j in data.parent){
-    		  var parentId = data.parent[i];
+    		  var parentId = data.parent[j];
     		  if(lastNode.id === parentId){
     			if(!findBranch){
     			  branche.push(data);
@@ -95,9 +95,11 @@
     		//判断是否与当前列冲突
     		if(checkConflict(branch,currentBranch)){
     		  isConflict = true;
+    		  console.log('branch index:',i,' crashed!');
     		  break;
     		}
     	  }
+    	  console.log('branch index:',i,'isConflict:',isConflict);
     	  if(!isConflict){
     		col.push(currentBranch);
     		findCol = true;
@@ -184,6 +186,12 @@
 	  return true;
 	}
 	if(anotherEnd>=oneStart && anotherEnd<=oneEnd ){
+	  return true;
+	}
+	if(oneStart>=anotherStart && oneStart<=anotherEnd ){
+	  return true;
+	}
+	if(oneEnd>=anotherStart && oneEnd<=anotherEnd ){
 	  return true;
 	}
 	return false;
