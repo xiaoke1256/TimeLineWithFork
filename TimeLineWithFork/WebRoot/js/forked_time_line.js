@@ -27,8 +27,8 @@
       //先整理出各个分支
       var branches = [];
       //凡是两个结点指向同一个父节点就算新的分支
-      for(var i in datas){
-    	  
+      for(var i = 0;i < datas.length;i++){
+    	
     	var data = datas[i];
     	if(!data.parent){
     	  var branche = [];//新分支
@@ -39,12 +39,12 @@
     	
     	//找各个分支的最后一个节点
     	var findBranch = false;
-    	for(var i in branches){
-    	  var branche = branches[i];
+    	for(var branchIdx in branches){
+    	  var branche = branches[branchIdx];
     	  var lastNode = branche[branche.length-1];
     	  
     	  if(!(data.parent instanceof Array) && lastNode.id === data.parent){
-    		console.log('lastNode.id:',lastNode.id,'data.parent',data.parent, (lastNode.id === data.parent));
+    		console.log('data.id:',data.id,'lastNode.id:',lastNode.id,'data.parent:',data.parent, (lastNode.id === data.parent));
     		branche.push(data);
     		findBranch = true;
     		break;
@@ -63,7 +63,7 @@
     			  }else if(!data.colMeta.fromBranchs){
     				data.colMeta.fromBranchs = [];
     			  }
-    			  data.colMeta.fromBranchs.push(i);
+    			  data.colMeta.fromBranchs.push(branchIdx);
     			}
     		  }
     		}
@@ -71,12 +71,18 @@
     	  }
     	}//of branches
     	
+    	console.log('data.id:',data.id,'findBranch:',findBranch);
     	//找不到则创建一个新分支
     	if(!findBranch){
     	  var branche = [];//新分支
       	  branche.push(data);
       	  branches.push(branche);
       	  //标记好这个分支是从哪里来的
+      	  
+//      	  for(var i in branches){
+//      		 var oldBranch =  branches[i];
+//      	  }
+      	  
     	}
     	
       }
@@ -91,9 +97,9 @@
     	  var col = cols[j];
     	  var isConflict = false;
     	  for(var k in col){
-    		var branch = col[k];
+    		var branchIdx = col[k];
     		//判断是否与当前列冲突
-    		if(checkConflict(branch,currentBranch)){
+    		if(checkConflict(branches[branchIdx],currentBranch)){
     		  isConflict = true;
     		  console.log('branch index:',i,' crashed!');
     		  break;
@@ -101,23 +107,25 @@
     	  }
     	  console.log('branch index:',i,'isConflict:',isConflict);
     	  if(!isConflict){
-    		col.push(currentBranch);
+    		col.push(i);
     		findCol = true;
     		break;
     	  }
     	}
     	//找不到不冲突的列则新建一个列
     	if(!findCol){
-    	  var col=[currentBranch];
+    	  var col=[i];
     	  cols.push(col);
     	}
       }
       
+      console.log('cols.length:',cols.length);
       //给每一条数据打上标记（哪个分支哪个列）。
       for(var colIndex in cols){
     	var col = cols[colIndex];
-    	for(var branchIndex in col){
-    	  var branche = col[branchIndex];
+    	for(var i in col){
+    	  var branchIndex = col[i];
+    	  var branche = branches[branchIndex];
     	  for(var dataIndex in branche){
     		var data = branche[dataIndex];
     		if(!data.colMeta){
@@ -177,11 +185,16 @@
   /**
    * 检测冲突
    */
-  var checkConflict = function(branche, another){
-	var oneStart = branche[0].timestamp;
-	var oneEnd = branche[branche.length-1].timestamp;
+  var checkConflict = function(branch, another){
+	console.log('branch:',JSON.stringify(branch));
+	var oneStart = branch[0].timestamp;
+	var oneEnd = branch[branch.length-1].timestamp;
 	var anotherStart = another[0].timestamp;
 	var anotherEnd = another[another.length-1].timestamp;
+	console.log('oneStart:',oneStart);
+	console.log('oneEnd:',oneEnd);
+	console.log('anotherStart:',anotherStart);
+	console.log('anotherEnd:',anotherEnd);
 	if(anotherStart>=oneStart && anotherStart<=oneEnd ){
 	  return true;
 	}
@@ -194,7 +207,7 @@
 	if(oneEnd>=anotherStart && oneEnd<=anotherEnd ){
 	  return true;
 	}
-	return false;
+    return false;
   }
   
 })(jQuery);
