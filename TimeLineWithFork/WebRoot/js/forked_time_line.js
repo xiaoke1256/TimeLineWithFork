@@ -76,12 +76,24 @@
     	if(!findBranch){
     	  var branche = [];//新分支
       	  branche.push(data);
+      	  var brancheIdx = branches.length;
       	  branches.push(branche);
       	  //标记好这个分支是从哪里来的
-      	  
-//      	  for(var i in branches){
-//      		 var oldBranch =  branches[i];
-//      	  }
+      	  for(var i in branches){
+      		var oldBranch =  branches[i];
+      		for(var j in oldBranch){
+      		  var oData = oldBranch[j];
+      		  if(data.parent === oData.id){
+      			if(!oData.colMeta){
+      			  oData.colMeta = {toBranchs:[]};
+      			}
+      			if(!oData.colMeta.toBranchs){
+      			  oData.colMeta.toBranchs = [];
+      			}
+      			oData.colMeta.toBranchs.push(brancheIdx);
+      		  }
+      		}
+      	  }
       	  
     	}
     	
