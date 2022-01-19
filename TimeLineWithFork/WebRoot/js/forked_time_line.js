@@ -79,10 +79,10 @@
       	  var brancheIdx = branches.length;
       	  branches.push(branche);
       	  //标记好这个分支是从哪里来的
-      	  for(var i in branches){
-      		var oldBranch =  branches[i];
-      		for(var j in oldBranch){
-      		  var oData = oldBranch[j];
+      	  for(var k in branches){
+      		var oldBranch =  branches[k];
+      		for(var l in oldBranch){
+      		  var oData = oldBranch[l];
       		  if(data.parent === oData.id){
       			if(!oData.colMeta){
       			  oData.colMeta = {toBranchs:[]};
