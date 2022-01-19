@@ -160,9 +160,33 @@
 		for(var colIndex = 0;colIndex<cols.length;colIndex++){
 		  $col = $('<div>').addClass('col');
 		  if(data.colMeta.colIndex == colIndex){
+			var toLeft = false;	
+			var toRight = false;	
+			if(data.colMeta.toBranchs && data.colMeta.toBranchs.length>0){ 
+			  for(var j in data.colMeta.toBranchs){
+				var bIdx = data.colMeta.toBranchs[j];
+				console.log('bIdx:',bIdx,'data.colMeta.branchIndex:',data.colMeta.branchIndex);
+				if(bIdx>data.colMeta.branchIndex){
+				  toRight = true;
+				}else if(bIdx<data.colMeta.branchIndex){
+				  toLeft = true;
+				}
+				
+			  }
+			}
+			if(toLeft){
+			  $col.append('<div class="oblique_to_left"></div>');
+			}else if(toRight){
+			  $col.append('<div class="empty"></div>');
+			}
 			$col.append('<div class="v-line">'+
 		            '<div class="dot"></div>'+
 		            '</div>');
+			if(toRight){
+			  $col.append('<div class="oblique_to_right"></div>');
+			}else if(toLeft){
+			  $col.append('<div class="empty"></div>');
+			}
 		  }
 		  $row.append($col);
 		}
