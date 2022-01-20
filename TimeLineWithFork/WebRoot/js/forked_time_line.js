@@ -153,6 +153,7 @@
       
       //绘制
 	  $(this).addClass('time_line');
+	  var branchStatuses = ['drawing'];//用于保存各个分支的状态,第0个分支默认是正在绘制状态
 	  for(var i in datas){
 		var data = datas[i];
 		console.log('in draw:','dataId:' , data.id,'branchIndex:',data.colMeta.branchIndex,'colIndex:',data.colMeta.colIndex);
@@ -165,6 +166,7 @@
 			if(data.colMeta.toBranchs && data.colMeta.toBranchs.length>0){ 
 			  for(var j in data.colMeta.toBranchs){
 				var bIdx = data.colMeta.toBranchs[j];
+				branchStatuses[bIdx] = 'toStart';
 				console.log('bIdx:',bIdx,'data.colMeta.branchIndex:',data.colMeta.branchIndex);
 				if(bIdx>data.colMeta.branchIndex){
 				  toRight = true;
@@ -186,6 +188,21 @@
 			  $col.append('<div class="oblique_to_right"></div>');
 			}else if(toLeft){
 			  $col.append('<div class="empty"></div>');
+			}
+		  }/*of if colIndex equal  */
+		  else{
+			for(var k in cols[colIndex]){
+		      var branchIdx = cols[colIndex][k];
+		      if(branchStatuses[branchIdx]==='toStart'){
+		    	branchStatuses[branchIdx]='start';
+		      }else if(branchStatuses[branchIdx]==='start'){
+		    	branchStatuses[branchIdx]='drawing';
+		    	$col.append('<div class="oblique_from_left" ></div>');
+		    	$col.append('<div class="v-line-half-down"></div>');
+		    	$col.append('<div class="empty"></div>');
+		      }else if(branchStatuses[branchIdx]==='drawing'){
+		    	$col.append('<div class="v-line"></div>');
+		      }
 			}
 		  }
 		  $row.append($col);
