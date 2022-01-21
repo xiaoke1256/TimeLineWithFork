@@ -161,6 +161,8 @@
 		for(var colIndex = 0;colIndex<cols.length;colIndex++){
 		  $col = $('<div>').addClass('col');
 		  if(data.colMeta.colIndex == colIndex){
+			var fromLeft = false;	
+			var fromRight = false;
 			var toLeft = false;	
 			var toRight = false;	
 			if(data.colMeta.toBranchs && data.colMeta.toBranchs.length>0){ 
@@ -176,17 +178,52 @@
 				
 			  }
 			}
-			if(toLeft){
-			  $col.append('<div class="oblique_to_left"></div>');
-			}else if(toRight){
+			if(data.colMeta.fromBranchs && data.colMeta.fromBranchs.length>0){ 
+			  for(var j in data.colMeta.fromBranchs){
+				var bIdx = data.colMeta.fromBranchs[j];
+				branchStatuses[bIdx] = 'end';
+				console.log('bIdx:',bIdx,'data.colMeta.branchIndex:',data.colMeta.branchIndex);
+				if(bIdx>data.colMeta.branchIndex){
+				  fromRight = true;
+				}else if(bIdx<data.colMeta.branchIndex){
+				  fromLeft = true;
+				}
+				
+			  }
+			}
+			if(toLeft || fromLeft){
+			  if(toLeft && fromLeft){
+				var $wrap = $('<div class="v_wrap">'); 
+				$wrap.append('<div class="oblique_from_right" >');
+				$wrap.append('<div class="oblique_to_right" >');
+				$col.append($wrap);
+			  }
+			  if(fromLeft){
+				$col.append('<div class="oblique_from_left"></div>');
+			  }
+			  if(toLeft){
+			    $col.append('<div class="oblique_to_left"></div>');
+			  }
+			}else if(toRight || fromRight ){
 			  $col.append('<div class="empty"></div>');
 			}
 			$col.append('<div class="v-line">'+
 		            '<div class="dot"></div>'+
 		            '</div>');
-			if(toRight){
-			  $col.append('<div class="oblique_to_right"></div>');
-			}else if(toLeft){
+			if(toRight || fromRight ){
+			  if(toLeft && fromLeft){
+				var $wrap = $('<div class="v_wrap">'); 
+				$wrap.append('<div class="oblique_from_left" >');
+				$wrap.append('<div class="oblique_to_left" >');
+				$col.append($wrap);
+			  }
+			  if(fromRight){
+				$col.append('<div class="oblique_from_right"></div>');
+			  }
+			  if(toRight){
+			    $col.append('<div class="oblique_to_right"></div>');
+			  }
+			}else if(toLeft || fromLeft){
 			  $col.append('<div class="empty"></div>');
 			}
 		  }/*of if colIndex equal  */
@@ -195,12 +232,19 @@
 		      var branchIdx = cols[colIndex][k];
 		      if(branchStatuses[branchIdx]==='toStart'){
 		    	branchStatuses[branchIdx]='start';
+		      }else if(branchStatuses[branchIdx]==='toEnd'){
+		    	branchStatuses[branchIdx]='end';
 		      }else if(branchStatuses[branchIdx]==='start'){
 		    	branchStatuses[branchIdx]='drawing';
 		    	$col.append('<div class="oblique_from_left" ></div>');
 		    	$col.append('<div class="v-line-half-down"></div>');
 		    	$col.append('<div class="empty"></div>');
-		      }else if(branchStatuses[branchIdx]==='drawing'){
+		      }else if(branchStatuses[branchIdx]==='end'){
+			    branchStatuses[branchIdx]='';
+			    //$col.append('<div class="oblique_to_left" ></div>');
+			    //$col.append('<div class="v-line-half-up"></div>');
+			    //$col.append('<div class="empty"></div>');
+			  }else if(branchStatuses[branchIdx]==='drawing'){
 		    	$col.append('<div class="v-line"></div>');
 		      }
 			}
