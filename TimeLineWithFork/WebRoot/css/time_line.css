@@ -130,7 +130,7 @@
   vertical-align: baseline;
 }
 /*只有上半部的竖线*/
-.time_line .v-line-half-top{
+.time_line .v-line-half-up{
   border: 0;
   border-left: 1px solid #999;
   width: 0;

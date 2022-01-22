@@ -176,22 +176,38 @@
 				}else if(bIdx<data.colMeta.branchIndex){
 				  toLeft = true;
 				}
-				
 			  }
 			}
 			if(data.colMeta.fromBranchs && data.colMeta.fromBranchs.length>0){ 
 			  for(var j in data.colMeta.fromBranchs){
 				var bIdx = data.colMeta.fromBranchs[j];
-				branchStatuses[bIdx] = 'toEnd';
 				console.log('bIdx:',bIdx,'data.colMeta.branchIndex:',data.colMeta.branchIndex);
 				if(bIdx>data.colMeta.branchIndex){
 				  fromRight = true;
 				}else if(bIdx<data.colMeta.branchIndex){
 				  fromLeft = true;
-				}
-				
+				}	
 			  }
 			}
+			//判断end 从其他的分支判断
+			if(branchStatuses[data.colMeta.branchIndex]==='drawing'){
+				//要不要收尾看下一个节点的情况
+		    	var nextData = datas[parseInt(i)+1];
+				if(data.id ==='5'){
+				  console.log('end,end,end, data.colMeta.branchIndex:',data.colMeta.branchIndex,'status:',branchStatuses[data.colMeta.branchIndex]);
+				  console.log('end,end,end, nextData.colMeta.fromBranchs:',nextData.colMeta.fromBranchs,'data.colMeta.branchIndex:',data.colMeta.branchIndex);
+			    }
+		    	if(nextData && nextData.colMeta.fromBranchs && nextData.colMeta.fromBranchs.indexOf(data.colMeta.branchIndex)>=0){
+		    	  branchStatuses[data.colMeta.branchIndex] = 'end';
+		    	  if(nextData.colMeta.colIndex>data.colMeta.colIndex){
+		    		toRight = true;
+		    	  }else if(nextData.colMeta.colIndex<data.colMeta.colIndex){
+		    		toLeft = true;
+		    	  }
+		    	}
+			}
+			
+			//正式绘制小方格里的内容
 			if(toLeft || fromLeft){
 			  if(toLeft && fromLeft){
 				var $wrap = $('<div class="v_wrap">'); 
@@ -208,9 +224,16 @@
 			}else if(toRight || fromRight ){
 			  $col.append('<div class="empty"></div>');
 			}
-			$col.append('<div class="v-line">'+
-		            '<div class="dot"></div>'+
-		            '</div>');
+			//此处是中间的那条线加一个点
+			if(branchStatuses[data.colMeta.branchIndex]==='start'){
+			//汇聚而来
+			  $col.append('<div class="v-line-half-down"><div class="dot"></div></div>');
+			}else if(branchStatuses[data.colMeta.branchIndex]==='end'){
+			  $col.append('<div class="v-line-half-up"><div class="dot"></div></div>');
+			}else{
+			  $col.append('<div class="v-line"><div class="dot"></div></div>');
+			}
+			
 			if(toRight || fromRight ){
 			  if(toLeft && fromLeft){
 				var $wrap = $('<div class="v_wrap">'); 
@@ -227,6 +250,12 @@
 			}else if(toLeft || fromLeft){
 			  $col.append('<div class="empty"></div>');
 			}
+			//改变状态
+			if(branchStatuses[data.colMeta.branchIndex]==='start'){
+			  branchStatuses[data.colMeta.branchIndex]='drawing';
+			}else if(branchStatuses[data.colMeta.branchIndex]==='end'){
+			  branchStatuses[data.colMeta.branchIndex]='empty';
+			}
 		  }/*of if colIndex equal  */
 		  else{
 			for(var k in cols[colIndex]){
@@ -241,35 +270,41 @@
 		    	$col.append('<div class="v-line-half-down"></div>');
 		    	$col.append('<div class="empty"></div>');
 		      }else if(branchStatuses[branchIdx]==='end'){
+		    	if(nextData.colMeta.colIndex<colIndex){
+			      $col.append('<div class="oblique_to_left" ></div>');
+				  $col.append('<div class="v-line-half-up"></div>');
+				  $col.append('<div class="empty"></div>');
+			    }else{
+			      $col.append('<div class="empty"></div>');
+				  $col.append('<div class="v-line-half-up"></div>');
+				  $col.append('<div class="oblique_to_right" ></div>');
+			    }
 			    branchStatuses[branchIdx]='empty';
-			    //$col.append('<div class="oblique_to_left" ></div>');
-			    //$col.append('<div class="v-line-half-up"></div>');
-			    //$col.append('<div class="empty"></div>');
-			  }else if(branchStatuses[branchIdx]==='drawing'){
+		      }else if(branchStatuses[branchIdx]==='drawing'){
 				//要不要收尾看下一个节点的情况
-		    	var nextData = datas[parseInt(i)+1];
-		    	if(data.id==='5'){
-		    	  console.log('i:',i,'(i+1):',i+1,'datas.length:',datas.length,'nextData:',datas[i+1]);
-		    	  console.log('nextData.colMeta.fromBranchs:',nextData.colMeta.fromBranchs);
-		    	  console.log('branchIdx:',branchIdx);
-		    	}
-		    	if(nextData && nextData.colMeta.fromBranchs && nextData.colMeta.fromBranchs.indexOf(branchIdx)>=0){
-		    	  //要收尾
-		    	  if(nextData.colMeta.colIndex<colIndex){
-		    		$col.append('<div class="oblique_to_left" ></div>');
-				    $col.append('<div class="v-line-half-top"></div>');
+			    var nextData = datas[parseInt(i)+1];
+			    if(data.id ==='5'){
+			      console.log('i:',i,'(i+1):',i+1,'datas.length:',datas.length,'nextData:',datas[i+1]);
+			      console.log('nextData.colMeta.fromBranchs:',nextData.colMeta.fromBranchs);
+			      console.log('branchIdx:',branchIdx);
+				}
+			    if(nextData && nextData.colMeta.fromBranchs && nextData.colMeta.fromBranchs.indexOf(branchIdx)>=0){
+			      //要收尾
+			      if(nextData.colMeta.colIndex<colIndex){
+			        $col.append('<div class="oblique_to_left" ></div>');
+				    $col.append('<div class="v-line-half-up"></div>');
 				    $col.append('<div class="empty"></div>');
-		    	  }else{
-		    		$col.append('<div class="empty"></div>');
-					$col.append('<div class="v-line-half-up"></div>');
+			      }else{
+			        $col.append('<div class="empty"></div>');
+				    $col.append('<div class="v-line-half-up"></div>');
 					$col.append('<div class="oblique_to_right" ></div>');
-		    	  }
-		    	  branchStatuses[branchIdx]='empty';
-		    	}else{
-		    	  //不要收尾
-		    	  $col.append('<div class="v-line"></div>');
-		    	}
-		      }
+			      }
+			      branchStatuses[branchIdx]='empty';
+			    }else{
+			      //不要收尾
+			      $col.append('<div class="v-line"></div>');
+			    }
+			  }
 			}
 		  }
 		  $row.append($col);
