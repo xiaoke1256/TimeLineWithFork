@@ -64,6 +64,7 @@
     				data.colMeta.fromBranchs = [];
     			  }
     			  data.colMeta.fromBranchs.push(branchIdx);
+    			  console.log('data.id:',data.id,'from witch branch:',branchIdx);
     			}
     		  }
     		}
@@ -181,7 +182,7 @@
 			if(data.colMeta.fromBranchs && data.colMeta.fromBranchs.length>0){ 
 			  for(var j in data.colMeta.fromBranchs){
 				var bIdx = data.colMeta.fromBranchs[j];
-				branchStatuses[bIdx] = 'end';
+				branchStatuses[bIdx] = 'toEnd';
 				console.log('bIdx:',bIdx,'data.colMeta.branchIndex:',data.colMeta.branchIndex);
 				if(bIdx>data.colMeta.branchIndex){
 				  fromRight = true;
@@ -240,12 +241,34 @@
 		    	$col.append('<div class="v-line-half-down"></div>');
 		    	$col.append('<div class="empty"></div>');
 		      }else if(branchStatuses[branchIdx]==='end'){
-			    branchStatuses[branchIdx]='';
+			    branchStatuses[branchIdx]='empty';
 			    //$col.append('<div class="oblique_to_left" ></div>');
 			    //$col.append('<div class="v-line-half-up"></div>');
 			    //$col.append('<div class="empty"></div>');
 			  }else if(branchStatuses[branchIdx]==='drawing'){
-		    	$col.append('<div class="v-line"></div>');
+				//要不要收尾看下一个节点的情况
+		    	var nextData = datas[parseInt(i)+1];
+		    	if(data.id==='5'){
+		    	  console.log('i:',i,'(i+1):',i+1,'datas.length:',datas.length,'nextData:',datas[i+1]);
+		    	  console.log('nextData.colMeta.fromBranchs:',nextData.colMeta.fromBranchs);
+		    	  console.log('branchIdx:',branchIdx);
+		    	}
+		    	if(nextData && nextData.colMeta.fromBranchs && nextData.colMeta.fromBranchs.indexOf(branchIdx)>=0){
+		    	  //要收尾
+		    	  if(nextData.colMeta.colIndex<colIndex){
+		    		$col.append('<div class="oblique_to_left" ></div>');
+				    $col.append('<div class="v-line-half-top"></div>');
+				    $col.append('<div class="empty"></div>');
+		    	  }else{
+		    		$col.append('<div class="empty"></div>');
+					$col.append('<div class="v-line-half-up"></div>');
+					$col.append('<div class="oblique_to_right" ></div>');
+		    	  }
+		    	  branchStatuses[branchIdx]='empty';
+		    	}else{
+		    	  //不要收尾
+		    	  $col.append('<div class="v-line"></div>');
+		    	}
 		      }
 			}
 		  }
