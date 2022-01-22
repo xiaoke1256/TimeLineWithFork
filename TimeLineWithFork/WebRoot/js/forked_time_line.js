@@ -208,9 +208,16 @@
 			}else if(toRight || fromRight ){
 			  $col.append('<div class="empty"></div>');
 			}
-			$col.append('<div class="v-line">'+
-		            '<div class="dot"></div>'+
-		            '</div>');
+			//此处是中间的那条线加一个点
+			if(branchStatuses[data.colMeta.branchIndex]==='start'){
+			//汇聚而来
+			  $col.append('<div class="v-line-half-down"><div class="dot"></div></div>');
+			}else if(branchStatuses[data.colMeta.branchIndex]==='end'){
+			  $col.append('<div class="v-line-half-up"><div class="dot"></div></div>');
+			}else{
+			  $col.append('<div class="v-line"><div class="dot"></div></div>');
+			}
+			
 			if(toRight || fromRight ){
 			  if(toLeft && fromLeft){
 				var $wrap = $('<div class="v_wrap">'); 
@@ -242,9 +249,6 @@
 		    	$col.append('<div class="empty"></div>');
 		      }else if(branchStatuses[branchIdx]==='end'){
 			    branchStatuses[branchIdx]='empty';
-			    //$col.append('<div class="oblique_to_left" ></div>');
-			    //$col.append('<div class="v-line-half-up"></div>');
-			    //$col.append('<div class="empty"></div>');
 			  }else if(branchStatuses[branchIdx]==='drawing'){
 				//要不要收尾看下一个节点的情况
 		    	var nextData = datas[parseInt(i)+1];
