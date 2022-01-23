@@ -22,6 +22,18 @@
     		{id:'6',timestamp:'6',text:'版本6',parent:['2']},
     		{id:'7',timestamp:'7',text:'版本7',parent:'6'}];
     	$('#time_line2').forkedTimeLine(datas2);
+    	
+    	var datas3 = [{id:'1',timestamp:'20220101 12:00:00',text:'版本1',parent:null},
+    		{id:'2',timestamp:'20220102 12:00:00',text:'版本2',parent:'1'},
+    		{id:'3',timestamp:'20220103 12:00:00',text:'版本3',parent:'1'},
+    		{id:'4',timestamp:'20220104 12:00:00',text:'版本4',parent:'3'},
+    		{id:'5',timestamp:'20220105 12:00:00',text:'版本5',parent:'2'},
+    		{id:'6',timestamp:'20220106 12:00:00',text:'版本6',parent:['4','5']},
+    		{id:'7',timestamp:'20220107 12:00:00',text:'版本7',parent:'6'},
+    		{id:'8',timestamp:'20220107 08:00:00',text:'版本8',parent:'2'},
+    		{id:'9',timestamp:'20220108 12:00:00',text:'版本9',parent:'8'}];
+    	
+    	$('#time_line3').forkedTimeLine(datas3);
     });
     </script>
   </head>
@@ -31,6 +43,9 @@
     </div>
     <div style="margin: 0 20px" >2</div>
     <div id="time_line2">
+    </div>
+    <div style="margin: 0 20px" >3</div>
+    <div id="time_line3">
     </div>
   </body>
 </html>
