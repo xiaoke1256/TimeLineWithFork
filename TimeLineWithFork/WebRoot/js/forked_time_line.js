@@ -193,10 +193,10 @@
 			if(branchStatuses[data.colMeta.branchIndex]==='drawing'){
 				//要不要收尾看下一个节点的情况
 		    	var nextData = datas[parseInt(i)+1];
-				if(data.id ==='5'){
-				  console.log('end,end,end, data.colMeta.branchIndex:',data.colMeta.branchIndex,'status:',branchStatuses[data.colMeta.branchIndex]);
-				  console.log('end,end,end, nextData.colMeta.fromBranchs:',nextData.colMeta.fromBranchs,'data.colMeta.branchIndex:',data.colMeta.branchIndex);
-			    }
+//				if(data.id ==='5'){
+//				  console.log('end,end,end, data.colMeta.branchIndex:',data.colMeta.branchIndex,'status:',branchStatuses[data.colMeta.branchIndex]);
+//				  console.log('end,end,end, nextData.colMeta.fromBranchs:',nextData.colMeta.fromBranchs,'data.colMeta.branchIndex:',data.colMeta.branchIndex);
+//			    }
 		    	if(nextData && nextData.colMeta.fromBranchs && nextData.colMeta.fromBranchs.indexOf(data.colMeta.branchIndex)>=0){
 		    	  branchStatuses[data.colMeta.branchIndex] = 'end';
 		    	  if(nextData.colMeta.colIndex>data.colMeta.colIndex){
@@ -283,11 +283,11 @@
 		      }else if(branchStatuses[branchIdx]==='drawing'){
 				//要不要收尾看下一个节点的情况
 			    var nextData = datas[parseInt(i)+1];
-			    if(data.id ==='5'){
-			      console.log('i:',i,'(i+1):',i+1,'datas.length:',datas.length,'nextData:',datas[i+1]);
-			      console.log('nextData.colMeta.fromBranchs:',nextData.colMeta.fromBranchs);
-			      console.log('branchIdx:',branchIdx);
-				}
+//			    if(data.id ==='5'){
+//			      console.log('i:',i,'(i+1):',i+1,'datas.length:',datas.length,'nextData:',datas[i+1]);
+//			      console.log('nextData.colMeta.fromBranchs:',nextData.colMeta.fromBranchs);
+//			      console.log('branchIdx:',branchIdx);
+//				}
 			    if(nextData && nextData.colMeta.fromBranchs && nextData.colMeta.fromBranchs.indexOf(branchIdx)>=0){
 			      //要收尾
 			      if(nextData.colMeta.colIndex<colIndex){
