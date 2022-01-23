@@ -6,19 +6,31 @@
     <script src="js/forked_time_line.js" type="text/javascript"></script>
     <script type="text/javascript">
     $(function(){
-    	var datas = [{id:'1',timestamp:'1',text:'版本1',parent:null},
+    	var datas1 = [{id:'1',timestamp:'1',text:'版本1',parent:null},
     		{id:'2',timestamp:'2',text:'版本2',parent:'1'},
     		{id:'3',timestamp:'3',text:'版本3',parent:'1'},
     		{id:'4',timestamp:'4',text:'版本4',parent:'3'},
     		{id:'5',timestamp:'5',text:'版本5',parent:'2'},
     		{id:'6',timestamp:'6',text:'版本6',parent:['4','5']},
     		{id:'7',timestamp:'7',text:'版本7',parent:'6'}];
-    	$('#time_line').forkedTimeLine(datas);
+    	$('#time_line1').forkedTimeLine(datas1);
+    	
+    	var datas2 = [{id:'1',timestamp:'1',text:'版本1',parent:null},
+    		{id:'2',timestamp:'2',text:'版本2',parent:'1'},
+    		{id:'3',timestamp:'3',text:'版本3',parent:'1'},
+    		{id:'4',timestamp:'4',text:'版本4',parent:'3'},
+    		{id:'6',timestamp:'6',text:'版本6',parent:['2']},
+    		{id:'7',timestamp:'7',text:'版本7',parent:'6'}];
+    	$('#time_line2').forkedTimeLine(datas2);
     });
     </script>
   </head>
   <body>
-    <div id="time_line">
+    <div style="margin: 0 20px" >1</div>
+    <div id="time_line1">
+    </div>
+    <div style="margin: 0 20px" >2</div>
+    <div id="time_line2">
     </div>
   </body>
 </html>
