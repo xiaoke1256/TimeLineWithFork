@@ -65,6 +65,8 @@
     			  }
     			  data.colMeta.fromBranchs.push(branchIdx);
     			  console.log('data.id:',data.id,'from witch branch:',branchIdx);
+    			  //这个分支真正的结束时间是:
+    			  branche.endTime = data.timestamp;
     			}
     		  }
     		}
@@ -92,6 +94,8 @@
       			  oData.colMeta.toBranchs = [];
       			}
       			oData.colMeta.toBranchs.push(brancheIdx);
+      			//这个分支真正的开始时间是：
+      			branche.startTime = oData.timestamp
       		  }
       		}
       	  }
@@ -139,7 +143,7 @@
     	for(var i in col){
     	  var branchIndex = col[i];
     	  var branche = branches[branchIndex];
-    	  for(var dataIndex in branche){
+    	  for(var dataIndex = 0 ; dataIndex < branche.length;dataIndex++){
     		var data = branche[dataIndex];
     		if(!data.colMeta){
     		  data.colMeta = {branchIndex:branchIndex,colIndex:colIndex};
@@ -184,14 +188,48 @@
    */
   var checkConflict = function(branch, another){
 	console.log('branch:',JSON.stringify(branch));
-	var oneStart = branch[0].timestamp;
-	var oneEnd = branch[branch.length-1].timestamp;
-	var anotherStart = another[0].timestamp;
-	var anotherEnd = another[another.length-1].timestamp;
+	var oneStart = branch.startTime;
+	var oneEnd = branch.endTime;
+	var anotherStart = another.startTime;
+	var anotherEnd = another.endTime;
+	//应该从这个分支划分出来那时开始。
 	console.log('oneStart:',oneStart);
 	console.log('oneEnd:',oneEnd);
 	console.log('anotherStart:',anotherStart);
 	console.log('anotherEnd:',anotherEnd);
+	if(anotherStart==undefined && anotherEnd==undefined){
+	  return true;
+	}else if(oneStart==undefined && oneEnd==undefined){
+	  return true;
+	}else if(anotherStart==undefined ){
+	  if(oneStart==undefined)
+	    return true;
+	  else if(oneStart<=anotherEnd)
+		return true;
+	  else
+	    return false;
+	}else if (anotherEnd==undefined){
+	  if(oneEnd==undefined)
+	    return true;
+	  else if(oneEnd>=anotherStart)
+		return true;
+	  else
+		return false;
+	}else if(oneStart == undefined){
+	  if(anotherStart==undefined)
+		return true;
+	  else if(anotherStart>=oneEnd)
+		return true;
+	  else
+		return false;
+	}else if(oneEnd == undefined){
+	  if(anotherEnd==undefined)
+		return true;
+	  else if(anotherEnd<=oneStart)
+		return true;
+	  else
+		return false;
+	}
 	if(anotherStart>=oneStart && anotherStart<=oneEnd ){
 	  return true;
 	}
