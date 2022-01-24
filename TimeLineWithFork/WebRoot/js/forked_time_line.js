@@ -323,20 +323,29 @@
 		  }
 			
 		  //正式绘制小方格里的内容
-		  if(toLeft || fromLeft){
-		    if(toLeft && fromLeft){
-			  var $wrap = $('<div class="v_wrap">'); 
-			  $wrap.append('<div class="oblique_from_left" >');
-			  $wrap.append('<div class="oblique_to_left" >');
-			  $col.append($wrap);
-		    }
-		    if(fromLeft){
+		  if(toLeft || fromLeft || hLineLeft){
+		    if(fromLeft && !toLeft && !hLineLeft){
 			  $col.append('<div class="oblique_from_left"></div>');
-		    }
-		    if(toLeft){
+		    }else if(toLeft && !fromLeft && !hLineLeft){
 		      $col.append('<div class="oblique_to_left"></div>');
+			}else if(!fromLeft && !toLeft && hLineLeft){
+			  $col.append('<div class="h-line-half"></div>');
+			}else{
+			  //三者必有其二
+			  var $wrap = $('<div class="v_wrap">');
+			  if(fromLeft){
+			    $wrap.append('<div class="oblique_from_left" >');
+			  }
+			  if(hLineLeft){
+				$wrap.append('<div class="h-line-half" >');
+			  }
+			  if(hLineLeft){
+				$wrap.append('<div class="oblique_to_left" >');
+			  }
+			  $col.append($wrap);
 			}
-		  }else if(toRight || fromRight ){
+		  }else if(toRight || fromRight || hLineRight){
+			//三者皆无且右边三者有其一
 			$col.append('<div class="empty"></div>');
 		  }
 		  //此处是中间的那条线加一个点
@@ -349,20 +358,28 @@
 		    $col.append('<div class="v-line"><div class="dot"></div></div>');
 		  }
 			
-		  if(toRight || fromRight ){
-		    if(toLeft && fromLeft){
-			  var $wrap = $('<div class="v_wrap">'); 
-			  $wrap.append('<div class="oblique_from_right" >');
-			  $wrap.append('<div class="oblique_to_right" >');
-			  $col.append($wrap);
-		    }
-		    if(fromRight){
+		  if(toRight || fromRight || hLineRight ){
+		    if(fromRight && !toRight && !hLineRight){
 			  $col.append('<div class="oblique_from_right"></div>');
-		    }
-		    if(toRight){
+		    }else if(toRight && !fromRight && !hLineRight ){
 		      $col.append('<div class="oblique_to_right"></div>');
-		    }
-		  }else if(toLeft || fromLeft){
+		    }else if(!fromRight && !toRight && hLineRight){
+			  $col.append('<div class="h-line-half"></div>');
+			}else{
+			  var $wrap = $('<div class="v_wrap">');
+			  if(fromRight){
+			    $wrap.append('<div class="oblique_from_right" >');
+			  }
+			  if(hLineRight){
+			    $wrap.append('<div class="h-line-half" >');
+			  }
+			  if(toRight){
+				$wrap.append('<div class="oblique_to_right" >');
+			  }
+			  $col.append($wrap);
+			}
+		  }else if(toLeft || fromLeft || hLineLeft){
+			//三者全无，且
 		    $col.append('<div class="empty"></div>');
 		  }
 		  //改变状态
