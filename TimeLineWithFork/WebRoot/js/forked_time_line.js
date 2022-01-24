@@ -259,26 +259,48 @@
 		  var fromRight = false;
 		  var toLeft = false;	
 		  var toRight = false;	
+		  var hLineLeft = false;
+		  var hLineRight = false;
 		  if(data.colMeta.toBranchs && data.colMeta.toBranchs.length>0){ 
 			for(var j in data.colMeta.toBranchs){
 			  var bIdx = data.colMeta.toBranchs[j];
 			  branchStatuses[bIdx] = 'toStart';
-			  console.log('bIdx:',bIdx,'data.colMeta.branchIndex:',data.colMeta.branchIndex);
-			  if(bIdx>data.colMeta.branchIndex){
-				toRight = true;
-			  }else if(bIdx<data.colMeta.branchIndex){
-				toLeft = true;
+			  //需要找到bIdx所在的列。
+			  var cIdx = getColIndxByBranch(bIdx,cols);
+			  console.log('cIdx:',cIdx,'data.colMeta.colIndex:',data.colMeta.colIndex);
+			  if(cIdx>data.colMeta.colIndex){
+				//所在的列的差距
+				if(cIdx-data.colMeta.colIndex>1){
+				  hLineRight = true;
+				}else{
+				  toRight = true;
+				}
+			  }else if(cIdx<data.colMeta.colIndex){
+			    if(data.colMeta.colIndex-cIdx>1){
+				  hLineLeft = true;
+				}else{
+				  toLeft = true;
+				}
 			  }
 		    }
 		  }
 		  if(data.colMeta.fromBranchs && data.colMeta.fromBranchs.length>0){ 
 			for(var j in data.colMeta.fromBranchs){
 			  var bIdx = data.colMeta.fromBranchs[j];
-			  console.log('bIdx:',bIdx,'data.colMeta.branchIndex:',data.colMeta.branchIndex);
-			  if(bIdx>data.colMeta.branchIndex){
-			    fromRight = true;
-			  }else if(bIdx<data.colMeta.branchIndex){
-			    fromLeft = true;
+			  var cIdx = getColIndxByBranch(bIdx,cols);
+			  console.log('cIdx:',cIdx,'data.colMeta.branchIndex:',data.colMeta.colIndex);
+			  if(cIdx>data.colMeta.colIndex){
+				if(cIdx-data.colMeta.colIndex>1){
+				  hLineRight = true;
+				}else{
+				  fromRight = true;
+				}
+			  }else if(cIdx<data.colMeta.colIndex){
+				if(data.colMeta.colIndex-cIdx>1){
+				  hLineLeft = true;
+				}else{
+			      fromLeft = true;
+				}
 			  }	
 		    }
 		  }
@@ -304,8 +326,8 @@
 		  if(toLeft || fromLeft){
 		    if(toLeft && fromLeft){
 			  var $wrap = $('<div class="v_wrap">'); 
-			  $wrap.append('<div class="oblique_from_right" >');
-			  $wrap.append('<div class="oblique_to_right" >');
+			  $wrap.append('<div class="oblique_from_left" >');
+			  $wrap.append('<div class="oblique_to_left" >');
 			  $col.append($wrap);
 		    }
 		    if(fromLeft){
@@ -330,8 +352,8 @@
 		  if(toRight || fromRight ){
 		    if(toLeft && fromLeft){
 			  var $wrap = $('<div class="v_wrap">'); 
-			  $wrap.append('<div class="oblique_from_left" >');
-			  $wrap.append('<div class="oblique_to_left" >');
+			  $wrap.append('<div class="oblique_from_right" >');
+			  $wrap.append('<div class="oblique_to_right" >');
 			  $col.append($wrap);
 		    }
 		    if(fromRight){
@@ -405,6 +427,18 @@
 	  //$row.append('<div class="col">'+data.id+'</div>');
 	  $(that).append($row);
 	}
+  }
+  
+  /**
+   * 查某分支是在哪一列中的
+   */
+  var getColIndxByBranch = function (bIdx,cols){
+	for(var i in cols){
+	  if(cols[i].indexOf(String(bIdx))>=0){
+		return i;
+	  }
+	}
+	return -1;
   }
   
 })(jQuery);
