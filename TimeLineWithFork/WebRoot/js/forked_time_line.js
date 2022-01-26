@@ -248,9 +248,49 @@
   var draw = function(that,datas,cols){
 	$(that).addClass('time_line');
 	var branchStatuses = ['drawing'];//用于保存各个分支的状态,第0个分支默认是正在绘制状态
+	
 	for(var i in datas){
 	  var data = datas[i];
 	  console.log('in draw:','dataId:' , data.id,'branchIndex:',data.colMeta.branchIndex,'colIndex:',data.colMeta.colIndex);
+	  var branchCrossLine = [];
+	  //先扫描各个列，做些数据准备
+	  for(var colIndex = 0;colIndex<cols.length;colIndex++){
+	    if(data.colMeta.toBranchs && data.colMeta.toBranchs.length>0){ 
+	      for(var j in data.colMeta.toBranchs){
+	    	var bIdx = data.colMeta.toBranchs[j];
+			//branchStatuses[bIdx] = 'toStart';
+			//需要找到bIdx所在的列。
+			var cIdx = getColIndxByBranch(bIdx,cols);
+			if(cIdx-data.colMeta.colIndex>1){
+			  for (var k= data.colMeta.colIndex;k<cIdx;k++ ){
+				//横线差几格
+				if(!branchCrossLine[k]){
+				  branchCrossLine[k]={};
+				}
+				if(k==cIdx-1){
+				  branchCrossLine[k].end = true;
+				}else{
+				  branchCrossLine[k].line = true;
+				}
+			  }
+			}else if(data.colMeta.colIndex-cIdx>1){
+			  for (var k= data.colMeta.colIndex;k<cIdx;k-- ){
+				//横线差几格
+				if(!branchCrossLine[k]){
+				  branchCrossLine[k]={};
+				}
+				if(k==cIdx+1){
+				  branchCrossLine[k].end = true;
+				}else{
+				  branchCrossLine[k].line = true;
+				}
+			  }
+			}
+			  
+	      }
+		}
+	  }
+	  
 	  var $row = $('<div>').addClass('row');
 	  for(var colIndex = 0;colIndex<cols.length;colIndex++){
 		$col = $('<div>').addClass('col');
@@ -271,12 +311,14 @@
 			  if(cIdx>data.colMeta.colIndex){
 				//所在的列的差距
 				if(cIdx-data.colMeta.colIndex>1){
+				  //TODO 差几格横线找个地方记录一下
 				  hLineRight = true;
 				}else{
 				  toRight = true;
 				}
 			  }else if(cIdx<data.colMeta.colIndex){
 			    if(data.colMeta.colIndex-cIdx>1){
+			      //TODO 差几格横线找个地方记录一下
 				  hLineLeft = true;
 				}else{
 				  toLeft = true;
@@ -291,12 +333,14 @@
 			  console.log('cIdx:',cIdx,'data.colMeta.branchIndex:',data.colMeta.colIndex);
 			  if(cIdx>data.colMeta.colIndex){
 				if(cIdx-data.colMeta.colIndex>1){
+				  //TODO 差几格横线找个地方记录一下
 				  hLineRight = true;
 				}else{
 				  fromRight = true;
 				}
 			  }else if(cIdx<data.colMeta.colIndex){
 				if(data.colMeta.colIndex-cIdx>1){
+				  //TODO 差几格横线找个地方记录一下
 				  hLineLeft = true;
 				}else{
 			      fromLeft = true;
