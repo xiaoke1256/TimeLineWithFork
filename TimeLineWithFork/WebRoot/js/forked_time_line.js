@@ -255,40 +255,119 @@
 	  var branchCrossLine = [];
 	  //先扫描各个列，做些数据准备
 	  for(var colIndex = 0;colIndex<cols.length;colIndex++){
+		//分叉出去了
 	    if(data.colMeta.toBranchs && data.colMeta.toBranchs.length>0){ 
 	      for(var j in data.colMeta.toBranchs){
 	    	var bIdx = data.colMeta.toBranchs[j];
-			//branchStatuses[bIdx] = 'toStart';
+			branchStatuses[bIdx] = 'toStart';
 			//需要找到bIdx所在的列。
 			var cIdx = getColIndxByBranch(bIdx,cols);
-			if(cIdx-data.colMeta.colIndex>1){
-			  for (var k= data.colMeta.colIndex;k<cIdx;k++ ){
-				//横线差几格
-				if(!branchCrossLine[k]){
-				  branchCrossLine[k]={};
+			if(cIdx>data.colMeta.colIndex){
+			  //从右边分裂出来，到本分支
+			  if(cIdx-data.colMeta.colIndex>1){
+			    for (var k= data.colMeta.colIndex;k<cIdx;k++ ){
+				  //横线差几格
+				  if(!branchCrossLine[k]){
+				    branchCrossLine[k]={};
+				  }
+				  if(k==cIdx-1){
+				    branchCrossLine[k].hLineLeft = true;
+				    branchCrossLine[k].toRight = true;
+				  }else if(k==data.colMeta.colIndex){
+					branchCrossLine[k].hLineRight = true;
+				  }else{
+				    branchCrossLine[k].hLineLeft = true;
+				    branchCrossLine[k].hLineRight = true;
+				  }
+			    }
+			  }else{
+				if(!branchCrossLine[data.colMeta.colIndex]){
+				  branchCrossLine[data.colMeta.colIndex]={};
 				}
-				if(k==cIdx-1){
-				  branchCrossLine[k].end = true;
-				}else{
-				  branchCrossLine[k].line = true;
-				}
+			    branchCrossLine[data.colMeta.colIndex].toRight = true;
 			  }
-			}else if(data.colMeta.colIndex-cIdx>1){
-			  for (var k= data.colMeta.colIndex;k<cIdx;k-- ){
-				//横线差几格
-				if(!branchCrossLine[k]){
-				  branchCrossLine[k]={};
+			}else if(cIdx>data.colMeta.colIndex){
+			  if(data.colMeta.colIndex-cIdx>1){
+			    for (var k= data.colMeta.colIndex;k<cIdx;k-- ){
+				  //横线差几格
+				  if(!branchCrossLine[k]){
+				    branchCrossLine[k]={};
+				  }
+				  if(k==cIdx+1){
+				    branchCrossLine[k].toLeft = true;
+				    branchCrossLine[k].hLineRight = true;
+				  }else if(k==data.colMeta.colIndex){
+					branchCrossLine[k].hLineLeft = true;
+				  }else{
+				    branchCrossLine[k].hLineLeft = true;
+				    branchCrossLine[k].hLineRight = true;
+				  }
+			    }
+			  }else{
+				if(!branchCrossLine[data.colMeta.colIndex]){
+				  branchCrossLine[data.colMeta.colIndex]={};
 				}
-				if(k==cIdx+1){
-				  branchCrossLine[k].end = true;
-				}else{
-				  branchCrossLine[k].line = true;
-				}
+				branchCrossLine[data.colMeta.colIndex].toLeft = true;
 			  }
 			}
 			  
 	      }
 		}
+	    //汇聚来的
+	    if(data.colMeta.fromBranchs && data.colMeta.fromBranchs.length>0){ 
+		  for(var j in data.colMeta.fromBranchs){
+			var bIdx = data.colMeta.fromBranchs[j];
+			var cIdx = getColIndxByBranch(bIdx,cols);
+			console.log('cIdx:',cIdx,'data.colMeta.branchIndex:',data.colMeta.colIndex);
+			if(cIdx>data.colMeta.colIndex){
+			  if(cIdx-data.colMeta.colIndex>1){
+				//差几格横线记录一下
+				for (var k= data.colMeta.colIndex;k<cIdx;k++ ){
+				  if(!branchCrossLine[k]){
+				    branchCrossLine[k]={};
+				  }
+				  if(k==cIdx-1){
+					branchCrossLine[k].hLineLeft = true;
+					branchCrossLine[k].fromRight = true;
+				  }else if(k==data.colMeta.colIndex){
+					branchCrossLine[k].hLineRight = true;
+				  }else{
+					branchCrossLine[k].hLineLeft = true;
+					branchCrossLine[k].hLineRight = true;
+				  }
+				}
+			  }else{
+				if(!branchCrossLine[data.colMeta.colIndex]){
+				  branchCrossLine[data.colMeta.colIndex]={};
+				}
+				branchCrossLine[data.colMeta.colIndex].fromRight = true;
+			  }
+			}else if(cIdx<data.colMeta.colIndex){
+				if(data.colMeta.colIndex-cIdx>1){
+				  //差几格横线记录一下
+				  for (var k= data.colMeta.colIndex;k<cIdx;k-- ){
+				    if(!branchCrossLine[k]){
+					  branchCrossLine[k]={};
+					}
+					if(k==cIdx+1){
+					  branchCrossLine[k].hLineRight = true;
+					  branchCrossLine[k].fromLeft = true;
+					}else if(k==data.colMeta.colIndex){
+					  branchCrossLine[k].hLineLeft = true;
+					}else{
+					  branchCrossLine[k].hLineLeft = true;
+					  branchCrossLine[k].hLineRight = true;
+					}
+				  }	
+				}else{
+				  if(!branchCrossLine[data.colMeta.colIndex]){
+					branchCrossLine[data.colMeta.colIndex]={};
+				  }
+				  branchCrossLine[data.colMeta.colIndex].fromLeft = true;
+				}
+			  }
+		  }
+	    }
 	  }
 	  
 	  var $row = $('<div>').addClass('row');
