@@ -317,6 +317,7 @@
 	    if(data.colMeta.fromBranchs && data.colMeta.fromBranchs.length>0){ 
 		  for(var j in data.colMeta.fromBranchs){
 			var bIdx = data.colMeta.fromBranchs[j];
+			//branchStatuses[bIdx] = 'end';
 			var cIdx = getColIndxByBranch(bIdx,cols);
 			console.log('cIdx:',cIdx,'data.colMeta.branchIndex:',data.colMeta.colIndex);
 			if(cIdx>data.colMeta.colIndex){
@@ -364,87 +365,43 @@
 					branchCrossLine[data.colMeta.colIndex]={};
 				  }
 				  branchCrossLine[data.colMeta.colIndex].fromLeft = true;
-				}
 			  }
+			}
 		  }
 	    }
-	  }
-	  
-	  var $row = $('<div>').addClass('row');
-	  for(var colIndex = 0;colIndex<cols.length;colIndex++){
-		$col = $('<div>').addClass('col');
-		if(data.colMeta.colIndex == colIndex){
-		  var fromLeft = false;	
-		  var fromRight = false;
-		  var toLeft = false;	
-		  var toRight = false;	
-		  var hLineLeft = false;
-		  var hLineRight = false;
-		  if(data.colMeta.toBranchs && data.colMeta.toBranchs.length>0){ 
-			for(var j in data.colMeta.toBranchs){
-			  var bIdx = data.colMeta.toBranchs[j];
-			  branchStatuses[bIdx] = 'toStart';
-			  //需要找到bIdx所在的列。
-			  var cIdx = getColIndxByBranch(bIdx,cols);
-			  console.log('cIdx:',cIdx,'data.colMeta.colIndex:',data.colMeta.colIndex);
-			  if(cIdx>data.colMeta.colIndex){
-				//所在的列的差距
-				if(cIdx-data.colMeta.colIndex>1){
-				  //TODO 差几格横线找个地方记录一下
-				  hLineRight = true;
-				}else{
-				  toRight = true;
-				}
-			  }else if(cIdx<data.colMeta.colIndex){
-			    if(data.colMeta.colIndex-cIdx>1){
-			      //TODO 差几格横线找个地方记录一下
-				  hLineLeft = true;
-				}else{
-				  toLeft = true;
-				}
-			  }
-		    }
-		  }
-		  if(data.colMeta.fromBranchs && data.colMeta.fromBranchs.length>0){ 
-			for(var j in data.colMeta.fromBranchs){
-			  var bIdx = data.colMeta.fromBranchs[j];
-			  var cIdx = getColIndxByBranch(bIdx,cols);
-			  console.log('cIdx:',cIdx,'data.colMeta.branchIndex:',data.colMeta.colIndex);
-			  if(cIdx>data.colMeta.colIndex){
-				if(cIdx-data.colMeta.colIndex>1){
-				  //TODO 差几格横线找个地方记录一下
-				  hLineRight = true;
-				}else{
-				  fromRight = true;
-				}
-			  }else if(cIdx<data.colMeta.colIndex){
-				if(data.colMeta.colIndex-cIdx>1){
-				  //TODO 差几格横线找个地方记录一下
-				  hLineLeft = true;
-				}else{
-			      fromLeft = true;
-				}
-			  }	
-		    }
-		  }
-		  //判断end 从其他的分支判断
-		  if(branchStatuses[data.colMeta.branchIndex]==='drawing'){
-			//要不要收尾看下一个节点的情况
-		    var nextData = datas[parseInt(i)+1];
-//			  if(data.id ==='5'){
+	    
+	    //判断end 从其他的分支判断
+		if(branchStatuses[data.colMeta.branchIndex]==='drawing'){
+		  //要不要收尾看下一个节点的情况
+		  var nextData = datas[parseInt(i)+1];
+//			if(data.id ==='5'){
 //				console.log('end,end,end, data.colMeta.branchIndex:',data.colMeta.branchIndex,'status:',branchStatuses[data.colMeta.branchIndex]);
 //				console.log('end,end,end, nextData.colMeta.fromBranchs:',nextData.colMeta.fromBranchs,'data.colMeta.branchIndex:',data.colMeta.branchIndex);
 //			  }
-		    if(nextData && nextData.colMeta.fromBranchs && nextData.colMeta.fromBranchs.indexOf(data.colMeta.branchIndex)>=0){
-		      branchStatuses[data.colMeta.branchIndex] = 'end';
-		      if(nextData.colMeta.colIndex>data.colMeta.colIndex){
-		        toRight = true;
-		      }else if(nextData.colMeta.colIndex<data.colMeta.colIndex){
-		        toLeft = true;
-		      }
+		  if(nextData && nextData.colMeta.fromBranchs && nextData.colMeta.fromBranchs.indexOf(data.colMeta.branchIndex)>=0){
+		    branchStatuses[data.colMeta.branchIndex] = 'end';
+		    if(!branchCrossLine[data.colMeta.colIndex]){
+			  branchCrossLine[data.colMeta.colIndex]={};
+			}
+		    if(nextData.colMeta.colIndex>data.colMeta.colIndex){
+		      branchCrossLine[data.colMeta.colIndex].toRight = true;
+		    }else if(nextData.colMeta.colIndex<data.colMeta.colIndex){
+		      branchCrossLine[data.colMeta.colIndex].toLeft = true;
 		    }
 		  }
-			
+		}
+	  }
+	  //正式绘制
+	  var $row = $('<div>').addClass('row');
+	  for(var colIndex = 0;colIndex<cols.length;colIndex++){
+		$col = $('<div>').addClass('col');
+		var fromLeft = branchCrossLine[data.colMeta.colIndex]?.fromLeft;	
+		var fromRight = branchCrossLine[data.colMeta.colIndex]?.fromRight;
+		var toLeft = branchCrossLine[data.colMeta.colIndex]?.toLeft;	
+		var toRight = branchCrossLine[data.colMeta.colIndex]?.toRight;	
+		var hLineLeft = branchCrossLine[data.colMeta.colIndex]?.hLineLeft;
+		var hLineRight = branchCrossLine[data.colMeta.colIndex]?.hLineRight;;
+		if(data.colMeta.colIndex == colIndex){
 		  //正式绘制小方格里的内容
 		  if(toLeft || fromLeft || hLineLeft){
 		    if(fromLeft && !toLeft && !hLineLeft){
@@ -505,13 +462,9 @@
 			//三者全无，且
 		    $col.append('<div class="empty"></div>');
 		  }
-		  //改变状态
-		  if(branchStatuses[data.colMeta.branchIndex]==='start'){
-		    branchStatuses[data.colMeta.branchIndex]='drawing';
-		  }else if(branchStatuses[data.colMeta.branchIndex]==='end'){
-	        branchStatuses[data.colMeta.branchIndex]='empty';
-		  }
+		  
 	    }/*of if colIndex equal  */
+		/*
 	    else{
 		  for(var k in cols[colIndex]){
 		    var branchIdx = cols[colIndex][k];
@@ -562,7 +515,21 @@
 			}
 	      }
 		}
+		*/
 		$row.append($col);
+		//改变状态
+		for(var k in cols[colIndex]){
+	      branchIdx = cols[colIndex][k];
+	      if(branchStatuses[branchIdx]==='toStart'){
+			branchStatuses[branchIdx]='start';
+		  }else if(branchStatuses[branchIdx]==='toEnd'){
+			branchStatuses[branchIdx]='end';
+		  }else if(branchStatuses[branchIdx]==='start'){
+		    branchStatuses[branchIdx]='drawing';
+		  }else if(branchStatuses[data.colMeta.branchIndex]==='end'){
+			branchStatuses[data.colMeta.branchIndex]='empty';
+		  }
+	    }
 	  }
 	  //$row.append('<div class="col">'+data.id+'</div>');
 	  $(that).append($row);
