@@ -284,7 +284,7 @@
 				if(!branchCrossLine[data.colMeta.colIndex]){
 				  branchCrossLine[data.colMeta.colIndex]={};
 				}
-			    branchCrossLine[data.colMeta.colIndex].toRight = true;
+				branchCrossLine[data.colMeta.colIndex].toRight = true;
 			  }
 			}else if(cIdx>data.colMeta.colIndex){
 			  if(data.colMeta.colIndex-cIdx>1){
@@ -309,6 +309,7 @@
 				}
 				branchCrossLine[data.colMeta.colIndex].toLeft = true;
 			  }
+			  //告诉cIdx的分支是从哪里分裂出来的
 			}
 			  
 	      }
@@ -371,37 +372,48 @@
 	    }
 	    
 	    //判断end 从其他的分支判断
-		if(branchStatuses[data.colMeta.branchIndex]==='drawing'){
-		  //要不要收尾看下一个节点的情况
-		  var nextData = datas[parseInt(i)+1];
-//			if(data.id ==='5'){
-//				console.log('end,end,end, data.colMeta.branchIndex:',data.colMeta.branchIndex,'status:',branchStatuses[data.colMeta.branchIndex]);
-//				console.log('end,end,end, nextData.colMeta.fromBranchs:',nextData.colMeta.fromBranchs,'data.colMeta.branchIndex:',data.colMeta.branchIndex);
-//			  }
-		  if(nextData && nextData.colMeta.fromBranchs && nextData.colMeta.fromBranchs.indexOf(data.colMeta.branchIndex)>=0){
-		    branchStatuses[data.colMeta.branchIndex] = 'end';
-		    if(!branchCrossLine[data.colMeta.colIndex]){
-			  branchCrossLine[data.colMeta.colIndex]={};
-			}
-		    if(nextData.colMeta.colIndex>data.colMeta.colIndex){
-		      branchCrossLine[data.colMeta.colIndex].toRight = true;
-		    }else if(nextData.colMeta.colIndex<data.colMeta.colIndex){
-		      branchCrossLine[data.colMeta.colIndex].toLeft = true;
+	    for(var idx = 0; idx < cols[colIndex].length; idx++){
+	      var bIdx = cols[colIndex][idx];
+		  if(branchStatuses[bIdx]==='drawing'){
+		    //要不要收尾看下一个节点的情况
+		    var nextData = datas[parseInt(i)+1];
+			if(data.id ==='5'){
+				console.log('end,end,end, bIdx:',bIdx,'status:',branchStatuses[bIdx]);
+				console.log('end,end,end, bIdx:',bIdx,'data.colMeta.branchIndex:',bIdx);
+			  }
+		    if(nextData && nextData.colMeta.fromBranchs && nextData.colMeta.fromBranchs.indexOf(bIdx)>=0){
+		      branchStatuses[bIdx] = 'end';
+		      if(!branchCrossLine[bIdx]){
+			    branchCrossLine[bIdx]={};
+			  }
+		      if(nextData.colMeta.colIndex>colIndex){
+		        branchCrossLine[bIdx].toRight = true;
+		      }else if(nextData.colMeta.colIndex<colIndex){
+		        branchCrossLine[bIdx].toLeft = true;
+		      }
 		    }
 		  }
-		}
+	    }
 	  }
+	  
 	  //正式绘制
 	  var $row = $('<div>').addClass('row');
 	  for(var colIndex = 0;colIndex<cols.length;colIndex++){
 		$col = $('<div>').addClass('col');
-		var fromLeft = branchCrossLine[data.colMeta.colIndex]?.fromLeft;	
-		var fromRight = branchCrossLine[data.colMeta.colIndex]?.fromRight;
-		var toLeft = branchCrossLine[data.colMeta.colIndex]?.toLeft;	
-		var toRight = branchCrossLine[data.colMeta.colIndex]?.toRight;	
-		var hLineLeft = branchCrossLine[data.colMeta.colIndex]?.hLineLeft;
-		var hLineRight = branchCrossLine[data.colMeta.colIndex]?.hLineRight;;
-		if(data.colMeta.colIndex == colIndex){
+		console.log('branchStatuses[colIndex]:',branchStatuses[colIndex],'row:',i,'colIndex:',colIndex);
+        if(branchStatuses[colIndex]!=='start'&&branchStatuses[colIndex]!=='end'
+        	&&branchStatuses[colIndex]!=='toEnd'&&branchStatuses[colIndex]!=='drawing'){
+          changeBranchStatus(colIndex,branchStatuses,cols);
+          $row.append($col);
+          continue;
+		}
+		var fromLeft = branchCrossLine[colIndex]?.fromLeft;	
+		var fromRight = branchCrossLine[colIndex]?.fromRight;
+		var toLeft = branchCrossLine[colIndex]?.toLeft;	
+		var toRight = branchCrossLine[colIndex]?.toRight;	
+		var hLineLeft = branchCrossLine[colIndex]?.hLineLeft;
+		var hLineRight = branchCrossLine[colIndex]?.hLineRight;;
+		
 		  //正式绘制小方格里的内容
 		  if(toLeft || fromLeft || hLineLeft){
 		    if(fromLeft && !toLeft && !hLineLeft){
@@ -429,14 +441,19 @@
 			$col.append('<div class="empty"></div>');
 		  }
 		  //此处是中间的那条线加一个点
-		  if(branchStatuses[data.colMeta.branchIndex]==='start'){
+		  var $vLine = {};
+		  if(branchStatuses[colIndex]==='start'){
 			//汇聚而来
-		    $col.append('<div class="v-line-half-down"><div class="dot"></div></div>');
-		  }else if(branchStatuses[data.colMeta.branchIndex]==='end'){
-		    $col.append('<div class="v-line-half-up"><div class="dot"></div></div>');
+			$vLine = $('<div class="v-line-half-down"></div>');
+		  }else if(branchStatuses[colIndex]==='end'){
+			$vLine = $('<div class="v-line-half-up"></div>');
 		  }else{
-		    $col.append('<div class="v-line"><div class="dot"></div></div>');
+		    $vLine = $('<div class="v-line"></div>');
 		  }
+		  if(data.colMeta.colIndex == colIndex){
+			$vLine.append('<div class="dot"></div>');
+		  }
+		  $col.append($vLine);
 			
 		  if(toRight || fromRight || hLineRight ){
 		    if(fromRight && !toRight && !hLineRight){
@@ -463,7 +480,6 @@
 		    $col.append('<div class="empty"></div>');
 		  }
 		  
-	    }/*of if colIndex equal  */
 		/*
 	    else{
 		  for(var k in cols[colIndex]){
@@ -518,22 +534,29 @@
 		*/
 		$row.append($col);
 		//改变状态
-		for(var k in cols[colIndex]){
-	      branchIdx = cols[colIndex][k];
-	      if(branchStatuses[branchIdx]==='toStart'){
-			branchStatuses[branchIdx]='start';
-		  }else if(branchStatuses[branchIdx]==='toEnd'){
-			branchStatuses[branchIdx]='end';
-		  }else if(branchStatuses[branchIdx]==='start'){
-		    branchStatuses[branchIdx]='drawing';
-		  }else if(branchStatuses[data.colMeta.branchIndex]==='end'){
-			branchStatuses[data.colMeta.branchIndex]='empty';
-		  }
-	    }
+		changeBranchStatus(colIndex,branchStatuses,cols);
 	  }
 	  //$row.append('<div class="col">'+data.id+'</div>');
 	  $(that).append($row);
 	}
+  }
+  
+  /**
+   * 改变状态
+   */
+  var changeBranchStatus = function(colIndex,branchStatuses,cols){
+	for(var k in cols[colIndex]){
+	  branchIdx = cols[colIndex][k];
+	  if(branchStatuses[branchIdx]==='toStart'){
+		branchStatuses[branchIdx]='start';
+	  }else if(branchStatuses[branchIdx]==='toEnd'){
+		branchStatuses[branchIdx]='end';
+	  }else if(branchStatuses[branchIdx]==='start'){
+	    branchStatuses[branchIdx]='drawing';
+	  }else if(branchStatuses[branchIdx]==='end'){
+		branchStatuses[branchIdx]='empty';
+	  }
+	}  
   }
   
   /**
