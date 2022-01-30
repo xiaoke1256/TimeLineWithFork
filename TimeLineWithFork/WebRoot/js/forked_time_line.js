@@ -309,11 +309,10 @@
 				}
 				branchCrossLine[data.colMeta.colIndex].toLeft = true;
 			  }
-			  //告诉cIdx的分支是从哪里分裂出来的
 			}
-			  
 	      }
 		}
+	    
 	    //汇聚来的
 	    if(data.colMeta.fromBranchs && data.colMeta.fromBranchs.length>0){ 
 		  for(var j in data.colMeta.fromBranchs){
@@ -371,16 +370,18 @@
 		  }
 	    }
 	    
-	    //判断end 从其他的分支判断
+	    //判断start 和 end 从其他的分支判断
 	    for(var idx = 0; idx < cols[colIndex].length; idx++){
 	      var bIdx = cols[colIndex][idx];
 		  if(branchStatuses[bIdx]==='drawing'){
 		    //要不要收尾看下一个节点的情况
 		    var nextData = datas[parseInt(i)+1];
+		    /*
 			if(data.id ==='5'){
 				console.log('end,end,end, bIdx:',bIdx,'status:',branchStatuses[bIdx]);
 				console.log('end,end,end, bIdx:',bIdx,'data.colMeta.branchIndex:',bIdx);
 			  }
+			  */
 		    if(nextData && nextData.colMeta.fromBranchs && nextData.colMeta.fromBranchs.indexOf(bIdx)>=0){
 		      branchStatuses[bIdx] = 'end';
 		      if(!branchCrossLine[bIdx]){
@@ -392,9 +393,20 @@
 		        branchCrossLine[bIdx].toLeft = true;
 		      }
 		    }
+		  }else if(branchStatuses[bIdx]==='start'){
+			//从哪里分裂出来的
+			var preData = datas[parseInt(i)-1];
+			if(!branchCrossLine[bIdx]){
+			  branchCrossLine[bIdx]={};
+			}
+			if(preData.colMeta.colIndex < colIndex){
+			  branchCrossLine[bIdx].fromLeft = true;
+			}else if(preData.colMeta.colIndex > colIndex){
+			  branchCrossLine[bIdx].fromRight = true;
+			}
 		  }
 	    }
-	  }
+	  }//of colIndex
 	  
 	  //正式绘制
 	  var $row = $('<div>').addClass('row');
@@ -402,7 +414,7 @@
 		$col = $('<div>').addClass('col');
 		console.log('branchStatuses[colIndex]:',branchStatuses[colIndex],'row:',i,'colIndex:',colIndex);
         if(branchStatuses[colIndex]!=='start'&&branchStatuses[colIndex]!=='end'
-        	&&branchStatuses[colIndex]!=='toEnd'&&branchStatuses[colIndex]!=='drawing'){
+        	&&branchStatuses[colIndex]!=='toEnd'&&branchStatuses[colIndex]!=='drawing'&&!branchCrossLine[colIndex]){
           changeBranchStatus(colIndex,branchStatuses,cols);
           $row.append($col);
           continue;
@@ -419,20 +431,32 @@
 		    if(fromLeft && !toLeft && !hLineLeft){
 			  $col.append('<div class="oblique_from_left"></div>');
 		    }else if(toLeft && !fromLeft && !hLineLeft){
-		      $col.append('<div class="oblique_to_left"></div>');
+		      $col.append('<div class="oblique_to_left margin_top"></div>');
 			}else if(!fromLeft && !toLeft && hLineLeft){
-			  $col.append('<div class="h-line-half"></div>');
+			  $col.append('<div class="h-line-half margin_top"></div>');
 			}else{
 			  //三者必有其二
+			  var topMargined = false;
 			  var $wrap = $('<div class="v_wrap">');
 			  if(fromLeft){
+				topMargined = true;
 			    $wrap.append('<div class="oblique_from_left" >');
 			  }
 			  if(hLineLeft){
-				$wrap.append('<div class="h-line-half" >');
+				if(!topMargined){
+				  $wrap.append('<div class="h-line-half margin_top" >');
+				  topMargined = true;
+				}else{
+				  $wrap.append('<div class="h-line-half" >');
+				}
 			  }
-			  if(hLineLeft){
-				$wrap.append('<div class="oblique_to_left" >');
+			  if(toLeft){
+				if(!topMargined){
+				  $wrap.append('<div class="oblique_to_left margin_top" >');
+				  topMargined = true;
+				}else{
+				  $wrap.append('<div class="oblique_to_left" >');
+				}
 			  }
 			  $col.append($wrap);
 			}
@@ -447,8 +471,10 @@
 			$vLine = $('<div class="v-line-half-down"></div>');
 		  }else if(branchStatuses[colIndex]==='end'){
 			$vLine = $('<div class="v-line-half-up"></div>');
-		  }else{
+		  }else if(branchStatuses[colIndex]==='drawing'){
 		    $vLine = $('<div class="v-line"></div>');
+		  }else{
+			$vLine = $('<div class="center_point"></div>');
 		  }
 		  if(data.colMeta.colIndex == colIndex){
 			$vLine.append('<div class="dot"></div>');
@@ -463,15 +489,30 @@
 		    }else if(!fromRight && !toRight && hLineRight){
 			  $col.append('<div class="h-line-half"></div>');
 			}else{
+			  //三者必有其二
+			  var topMargined = false;
 			  var $wrap = $('<div class="v_wrap">');
 			  if(fromRight){
+				topMargined = true;
 			    $wrap.append('<div class="oblique_from_right" >');
 			  }
 			  if(hLineRight){
-			    $wrap.append('<div class="h-line-half" >');
+				if(!topMargined){
+				  $wrap.append('<div class="h-line-half margin_top" >');
+				  topMargined = true;
+				}else{
+				  $wrap.append('<div class="h-line-half" >');	
+				}
+			    
 			  }
 			  if(toRight){
-				$wrap.append('<div class="oblique_to_right" >');
+				if(!topMargined){
+				  $wrap.append('<div class="oblique_to_right margin_top" >');
+				  topMargined = true;
+				}else{
+				  $wrap.append('<div class="oblique_to_right" >');
+				}
+				
 			  }
 			  $col.append($wrap);
 			}
@@ -535,10 +576,10 @@
 		$row.append($col);
 		//改变状态
 		changeBranchStatus(colIndex,branchStatuses,cols);
-	  }
+	  }// of colIndex
 	  //$row.append('<div class="col">'+data.id+'</div>');
 	  $(that).append($row);
-	}
+	}//of row
   }
   
   /**

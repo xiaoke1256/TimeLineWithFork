@@ -106,7 +106,6 @@
   height: 10px;
   display: inline-block;
   vertical-align: baseline;
-  margin-top: 10px;
 }
 
 .time_line .oblique_to_left::after{
@@ -117,6 +116,10 @@
   display: block;
   -webkit-transform: scale(1.5) translateY(3.0px) rotateZ(-45deg) ;
   transform: scale(1.5) translateY(3.0px) rotateZ(-45deg) ;
+}
+
+.time_line .margin_top{
+  margin-top:10px;
 }
   
   /*只有下半部的竖线*/
