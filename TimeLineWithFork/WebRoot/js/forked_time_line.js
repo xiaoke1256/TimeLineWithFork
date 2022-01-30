@@ -577,7 +577,10 @@
 		//改变状态
 		changeBranchStatus(colIndex,branchStatuses,cols);
 	  }// of colIndex
-	  //$row.append('<div class="col">'+data.id+'</div>');
+	  
+	  //绘制完毕开始填写日期和文字
+	  $row.append('<div class="col text">'+data.timestamp+'</div>');
+	  $row.append('<div class="col text">'+data.text+'</div>');
 	  $(that).append($row);
 	}//of row
   }
