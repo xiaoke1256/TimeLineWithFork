@@ -259,55 +259,39 @@
 	    if(data.colMeta.toBranchs && data.colMeta.toBranchs.length>0){ 
 	      for(var j in data.colMeta.toBranchs){
 	    	var bIdx = data.colMeta.toBranchs[j];
-			branchStatuses[bIdx] = 'toStart';
+			branchStatuses[bIdx] = 'start';
 			//需要找到bIdx所在的列。
 			var cIdx = getColIndxByBranch(bIdx,cols);
 			if(cIdx>data.colMeta.colIndex){
 			  //从右边分裂出来，到本分支
-			  if(cIdx-data.colMeta.colIndex>1){
-			    for (var k= data.colMeta.colIndex;k<cIdx;k++ ){
-				  //横线差几格
-				  if(!branchCrossLine[k]){
-				    branchCrossLine[k]={};
-				  }
-				  if(k==cIdx-1){
-				    branchCrossLine[k].hLineLeft = true;
-				    branchCrossLine[k].toRight = true;
-				  }else if(k==data.colMeta.colIndex){
-					branchCrossLine[k].hLineRight = true;
-				  }else{
-				    branchCrossLine[k].hLineLeft = true;
-				    branchCrossLine[k].hLineRight = true;
-				  }
-			    }
-			  }else{
-				if(!branchCrossLine[data.colMeta.colIndex]){
-				  branchCrossLine[data.colMeta.colIndex]={};
+			  for (var k= data.colMeta.colIndex;k<cIdx;k++ ){
+				//横线差几格
+				if(!branchCrossLine[k]){
+				  branchCrossLine[k]={};
 				}
-				branchCrossLine[data.colMeta.colIndex].toRight = true;
+				if(k==cIdx){
+				  branchCrossLine[k].fromLeft = true;
+				}else if(k==data.colMeta.colIndex){
+				  branchCrossLine[k].hLineRight = true;
+				}else{
+				  branchCrossLine[k].hLineLeft = true;
+				  branchCrossLine[k].hLineRight = true;
+				}
 			  }
 			}else if(cIdx>data.colMeta.colIndex){
-			  if(data.colMeta.colIndex-cIdx>1){
-			    for (var k= data.colMeta.colIndex;k<cIdx;k-- ){
-				  //横线差几格
-				  if(!branchCrossLine[k]){
-				    branchCrossLine[k]={};
-				  }
-				  if(k==cIdx+1){
-				    branchCrossLine[k].toLeft = true;
-				    branchCrossLine[k].hLineRight = true;
-				  }else if(k==data.colMeta.colIndex){
-					branchCrossLine[k].hLineLeft = true;
-				  }else{
-				    branchCrossLine[k].hLineLeft = true;
-				    branchCrossLine[k].hLineRight = true;
-				  }
-			    }
-			  }else{
-				if(!branchCrossLine[data.colMeta.colIndex]){
-				  branchCrossLine[data.colMeta.colIndex]={};
+			  for (var k= data.colMeta.colIndex;k<cIdx;k-- ){
+				//横线差几格
+				if(!branchCrossLine[k]){
+				  branchCrossLine[k]={};
 				}
-				branchCrossLine[data.colMeta.colIndex].toLeft = true;
+				if(k==cIdx){
+				  branchCrossLine[k].fromRight = true;
+				}else if(k==data.colMeta.colIndex){
+				  branchCrossLine[k].hLineLeft = true;
+				}else{
+				  branchCrossLine[k].hLineLeft = true;
+				  branchCrossLine[k].hLineRight = true;
+				}
 			  }
 			}
 	      }
@@ -321,50 +305,34 @@
 			var cIdx = getColIndxByBranch(bIdx,cols);
 			console.log('cIdx:',cIdx,'data.colMeta.branchIndex:',data.colMeta.colIndex);
 			if(cIdx>data.colMeta.colIndex){
-			  if(cIdx-data.colMeta.colIndex>1){
-				//差几格横线记录一下
-				for (var k= data.colMeta.colIndex;k<cIdx;k++ ){
-				  if(!branchCrossLine[k]){
-				    branchCrossLine[k]={};
-				  }
-				  if(k==cIdx-1){
-					branchCrossLine[k].hLineLeft = true;
-					branchCrossLine[k].fromRight = true;
-				  }else if(k==data.colMeta.colIndex){
-					branchCrossLine[k].hLineRight = true;
-				  }else{
-					branchCrossLine[k].hLineLeft = true;
-					branchCrossLine[k].hLineRight = true;
-				  }
+			  for (var k= data.colMeta.colIndex;k<cIdx;k++ ){
+			    if(!branchCrossLine[k]){
+				  branchCrossLine[k]={};
 				}
-			  }else{
-				if(!branchCrossLine[data.colMeta.colIndex]){
-				  branchCrossLine[data.colMeta.colIndex]={};
+				if(k==cIdx){
+				  //branchCrossLine[k].hLineLeft = true;
+				  branchCrossLine[k].toLeft = true;
+				}else if(k==data.colMeta.colIndex){
+				  branchCrossLine[k].hLineRight = true;
+				}else{
+				  branchCrossLine[k].hLineLeft = true;
+				  branchCrossLine[k].hLineRight = true;
 				}
-				branchCrossLine[data.colMeta.colIndex].fromRight = true;
 			  }
 			}else if(cIdx<data.colMeta.colIndex){
-				if(data.colMeta.colIndex-cIdx>1){
-				  //差几格横线记录一下
-				  for (var k= data.colMeta.colIndex;k<cIdx;k-- ){
-				    if(!branchCrossLine[k]){
-					  branchCrossLine[k]={};
-					}
-					if(k==cIdx+1){
-					  branchCrossLine[k].hLineRight = true;
-					  branchCrossLine[k].fromLeft = true;
-					}else if(k==data.colMeta.colIndex){
-					  branchCrossLine[k].hLineLeft = true;
-					}else{
-					  branchCrossLine[k].hLineLeft = true;
-					  branchCrossLine[k].hLineRight = true;
-					}
-				  }	
+			  for (var k= data.colMeta.colIndex;k<cIdx;k-- ){
+				if(!branchCrossLine[k]){
+				  branchCrossLine[k]={};
+				}
+				if(k==cIdx){
+				  //branchCrossLine[k].hLineRight = true;
+			      branchCrossLine[k].toRight = true;
+				}else if(k==data.colMeta.colIndex){
+				  branchCrossLine[k].hLineLeft = true;
 				}else{
-				  if(!branchCrossLine[data.colMeta.colIndex]){
-					branchCrossLine[data.colMeta.colIndex]={};
-				  }
-				  branchCrossLine[data.colMeta.colIndex].fromLeft = true;
+				  branchCrossLine[k].hLineLeft = true;
+				  branchCrossLine[k].hLineRight = true;
+				}
 			  }
 			}
 		  }
@@ -383,27 +351,27 @@
 			  }
 			  */
 		    if(nextData && nextData.colMeta.fromBranchs && nextData.colMeta.fromBranchs.indexOf(bIdx)>=0){
-		      branchStatuses[bIdx] = 'end';
-		      if(!branchCrossLine[bIdx]){
-			    branchCrossLine[bIdx]={};
-			  }
-		      if(nextData.colMeta.colIndex>colIndex){
-		        branchCrossLine[bIdx].toRight = true;
-		      }else if(nextData.colMeta.colIndex<colIndex){
-		        branchCrossLine[bIdx].toLeft = true;
-		      }
+		      branchStatuses[bIdx] = 'toEnd';
+//		      if(!branchCrossLine[bIdx]){
+//			    branchCrossLine[bIdx]={};
+//			  }
+//		      if(nextData.colMeta.colIndex>colIndex){
+//		        branchCrossLine[bIdx].toRight = true;
+//		      }else if(nextData.colMeta.colIndex<colIndex){
+//		        branchCrossLine[bIdx].toLeft = true;
+//		      }
 		    }
 		  }else if(branchStatuses[bIdx]==='start'){
 			//从哪里分裂出来的
-			var preData = datas[parseInt(i)-1];
-			if(!branchCrossLine[bIdx]){
-			  branchCrossLine[bIdx]={};
-			}
-			if(preData.colMeta.colIndex < colIndex){
-			  branchCrossLine[bIdx].fromLeft = true;
-			}else if(preData.colMeta.colIndex > colIndex){
-			  branchCrossLine[bIdx].fromRight = true;
-			}
+//			var preData = datas[parseInt(i)-1];
+//			if(!branchCrossLine[bIdx]){
+//			  branchCrossLine[bIdx]={};
+//			}
+//			if(preData.colMeta.colIndex < colIndex){
+//			  branchCrossLine[bIdx].fromLeft = true;
+//			}else if(preData.colMeta.colIndex > colIndex){
+//			  branchCrossLine[bIdx].fromRight = true;
+//			}
 		  }
 	    }
 	  }//of colIndex
@@ -424,14 +392,14 @@
 		var toLeft = branchCrossLine[colIndex]?.toLeft;	
 		var toRight = branchCrossLine[colIndex]?.toRight;	
 		var hLineLeft = branchCrossLine[colIndex]?.hLineLeft;
-		var hLineRight = branchCrossLine[colIndex]?.hLineRight;;
+		var hLineRight = branchCrossLine[colIndex]?.hLineRight;
 		
 		  //正式绘制小方格里的内容
 		  if(toLeft || fromLeft || hLineLeft){
 		    if(fromLeft && !toLeft && !hLineLeft){
-			  $col.append('<div class="oblique_from_left"></div>');
+			  $col.append('<div class="oblique_from_left margin_top"></div>');
 		    }else if(toLeft && !fromLeft && !hLineLeft){
-		      $col.append('<div class="oblique_to_left margin_top"></div>');
+		      $col.append('<div class="oblique_to_left"></div>');
 			}else if(!fromLeft && !toLeft && hLineLeft){
 			  $col.append('<div class="h-line-half margin_top"></div>');
 			}else{
@@ -468,7 +436,7 @@
 		  var $vLine = {};
 		  if(branchStatuses[colIndex]==='start'){
 			//汇聚而来
-			$vLine = $('<div class="v-line-half-down"></div>');
+			$vLine = $('<div></div>');
 		  }else if(branchStatuses[colIndex]==='end'){
 			$vLine = $('<div class="v-line-half-up"></div>');
 		  }else if(branchStatuses[colIndex]==='drawing'){
