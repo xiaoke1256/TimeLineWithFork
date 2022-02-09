@@ -363,13 +363,13 @@
 		    }
 		  }else if(branchStatuses[bIdx]==='end'){
 			//从哪里分裂出来的
-			var preData = datas[parseInt(i)-1];
+			//var preData = datas[parseInt(i)-1];
 			if(!branchCrossLine[bIdx]){
 			  branchCrossLine[bIdx]={};
 			}
-			if(preData.colMeta.colIndex < colIndex){
+			if(data.colMeta.colIndex < colIndex){
 			  branchCrossLine[bIdx].toLeft = true;
-			}else if(preData.colMeta.colIndex > colIndex){
+			}else if(data.colMeta.colIndex > colIndex){
 			  branchCrossLine[bIdx].toRight = true;
 			}
 		  }
