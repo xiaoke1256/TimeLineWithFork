@@ -4,4 +4,4 @@
 # TimeLineWithFork
 
 一个带分叉的时间线组件。
-先实现一个jQuery版本的。
+实现了一个jQuery版本的。
