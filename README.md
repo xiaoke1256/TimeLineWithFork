@@ -9,7 +9,7 @@
 效果如下：
 ![图片](./TimeLineWithFork/doc/time_line.png?raw=true)
 
-### 用法
+## 用法
 第一步：引入jQuery和forked_time_line的相关组件：
 ```
 <script type="text/javascript">
