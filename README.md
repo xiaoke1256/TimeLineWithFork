@@ -6,4 +6,5 @@
 一个带分叉的时间线组件。
 实现了一个jQuery版本的。
 
+效果如下：
 ![图片](./TimeLineWithFork/doc/time_line.png?raw=true)
